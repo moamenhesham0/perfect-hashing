@@ -1,3 +1,5 @@
+package perfecthashing.hashing;
+
 public interface IPerfectHashTable {
 
     /* Inserts an entry to the hash set */

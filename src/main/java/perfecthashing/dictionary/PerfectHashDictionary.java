@@ -30,4 +30,18 @@ public class PerfectHashDictionary {
     public boolean delete(String key) {
         return backend.delete(key);
     }
+
+    public boolean insert(String key) {
+        return backend.insert(key);
+    }
+
+    public boolean batchInsert(final String filePath) {
+        // TODO: Implement a function to read from a file and insert
+        throw new UnsupportedOperationException("Batch insert from file is coming in a future release");
+    }
+
+    public boolean batchDelete(final String filePath) {
+        // TODO: Implement a function to read from a file and delete
+        throw new UnsupportedOperationException("Batch delete from file is coming in a future release");
+    }
 }
