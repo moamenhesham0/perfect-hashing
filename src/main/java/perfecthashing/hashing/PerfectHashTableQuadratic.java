@@ -1,125 +1,102 @@
 package perfecthashing.hashing;
 
-public class PerfectHashTableQuadratic
-{
+import java.util.*;
 
+public class PerfectHashTableQuadratic {
 
     private String[] hashTable;
-    private List <String> keys;
+    private List<String> keys;
     private int size;
     private int capacity;
-    private UniversalHashFunction hashFunction;
+    private UniversalHashing hashFunction;
 
+    /*
+     * Computes the number of bits needed in the hash function matrix row dimension
+     */
 
-    /* Computes the number of bits needed in the hash function matrix row dimension */
-
-    private static final int computeUBits(int capacity)
-    {
+    private static final int computeUBits(int capacity) {
         return (int) Math.floor(Math.log(capacity) / Math.log(2));
     }
 
+    /*
+     * Rehashes the hash table when a collision occurs.
+     * This is resets the hash set to a new hash set and reinserts the keys
+     */
 
-
-    /* Rehashes the hash table when a collision occurs.
-      This is resets the hash set to a new hash set and reinserts the keys*/
-
-    private void rehash()
-    {
+    private void rehash() {
         int newSize = 0;
-        while (newSize < this.size)
-        {
+        while (newSize < this.size) {
             newSize = 0;
 
-            this.hashFunction = new UniversalHashFunction(Integer.SIZE, computeUBits(capacity));
+            this.hashFunction = new UniversalHashing(Integer.SIZE, computeUBits(capacity));
 
             this.hashTable = new String[capacity];
 
-
-            for(String key : keys)
-            {
+            for (String key : keys) {
                 int index = hashFunction.hash(key) % capacity;
 
-                if (this.hashTable[index] == null)
-                {
+                if (this.hashTable[index] == null) {
                     this.hashTable[index] = key;
                     ++newSize;
-                }
-                else
-                {
+                } else {
                     break;
                 }
             }
 
-
         }
     }
 
-
-
-    public PerfectHashTableLinear(int capacity)
-    {
-        this.capacity = capacity;
+    public PerfectHashTableQuadratic(int capacity) {
+        this.capacity = capacity * capacity;
         this.size = 0;
         this.hashTable = new String[capacity];
         this.keys = new ArrayList<>();
-        this.hashFunction = new UniversalHashFunction(Integer.SIZE, computeUBits(capacity));
+        this.hashFunction = new UniversalHashing(Integer.SIZE, computeUBits(capacity));
     }
 
-
-
-
-    public void insert(String key)
-    {
+    public boolean insert(String key) {
         int index = hashFunction.hash(key) % capacity;
 
         keys.add(key);
         ++size;
 
-
-        if (hashTable[index] == null)
-        {
+        if (hashTable[index] == null) {
             hashTable[index] = key;
         }
 
-        else if (hashTable[index].equals(key))
-        {
+        else if (hashTable[index].equals(key)) {
             return false;
         }
 
-        else
-        {
+        else {
             rehash();
         }
 
         return true;
     }
 
-    public boolean delete(String key)
-    {
+    public boolean delete(String key) {
         int index = hashFunction.hash(key) % capacity;
 
-        if (hashTable[index] != null && hashTable[index].equals(key))
-        {
+        if (hashTable[index] != null && hashTable[index].equals(key)) {
             hashTable[index] = null;
             --size;
         }
 
-        else
-        {
+        else {
             return false;
         }
 
         return true;
     }
 
-    public boolean search(String key)
-    {
+    public boolean search(String key) {
         int index = hashFunction.hash(key) % capacity;
 
-        if (hashTable[index] != null && hashTable[index].equals(key))
-        {
+        if (hashTable[index] != null && hashTable[index].equals(key)) {
             return true;
         }
 
         return false;
     }
+}
