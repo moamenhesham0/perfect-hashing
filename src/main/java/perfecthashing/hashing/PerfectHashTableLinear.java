@@ -1,126 +1,57 @@
 package perfecthashing.hashing;
 
-public class PerfectHashTableLinear {
+import perfecthashing.hashing.PerfectHashTableQuadratic;
+import java.util.*;
+public class PerfectHashTableLinear implements IPerfectHashTable {
 
 
-    private String[] hashTable;
-    private List <String> keys;
-    private int size;
+    private PerfectHashTableQuadratic[] hashTable;
     private int capacity;
-    private UniversalHashFunction hashFunction;
+    private UniversalHashing hashFunction;
 
 
-    /* Computes the number of bits needed in the hash function matrix row dimension */
 
-    private static final int computeUBits(int capacity)
+    public PerfectHashTableLinear(List<String> keys)
     {
-        return (int) Math.floor(Math.log(capacity) / Math.log(2));
-    }
 
+        final int capacity = keys.size();
 
+        this.capacity = capacity * capacity;
+        this.hashTable = new PerfectHashTableQuadratic[this.capacity];
+        this.hashFunction = new UniversalHashing(Integer.SIZE, PerfectHashTableQuadratic.computeUBits(capacity));
 
-    /* Rehashes the hash table when a collision occurs.
-      This is resets the hash set to a new hash set and reinserts the keys*/
-
-    private void rehash()
-    {
-        int newSize = 0;
-        while (newSize < this.size)
+        for(PerfectHashTableQuadratic perfectHashTable : hashTable)
         {
-            newSize = 0;
-
-            this.hashFunction = new UniversalHashFunction(Integer.SIZE, computeUBits(capacity));
-
-            this.hashTable = new String[capacity];
-
-
-            for(String key : keys)
-            {
-                int index = hashFunction.hash(key) % capacity;
-
-                if (this.hashTable[index] == null)
-                {
-                    this.hashTable[index] = key;
-                    ++newSize;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-
+            perfectHashTable = new PerfectHashTableQuadratic();
         }
-    }
 
+        for(String key : keys)
+        {
+            this.insert(key);
+        }
 
-
-    public PerfectHashTableLinear(int capacity)
-    {
-        this.capacity = capacity;
-        this.size = 0;
-        this.hashTable = new String[capacity];
-        this.keys = new ArrayList<>();
-        this.hashFunction = new UniversalHashFunction(Integer.SIZE, computeUBits(capacity));
     }
 
 
 
 
-    public void insert(String key)
+    public boolean insert(String key)
     {
         int index = hashFunction.hash(key) % capacity;
-
-        keys.add(key);
-        ++size;
-
-
-        if (hashTable[index] == null)
-        {
-            hashTable[index] = key;
-        }
-
-        else if (hashTable[index].equals(key))
-        {
-            return false;
-        }
-
-        else
-        {
-            rehash();
-        }
-
-        return true;
+        return this.hashTable[index].insert(key);
     }
+
 
     public boolean delete(String key)
     {
         int index = hashFunction.hash(key) % capacity;
-
-        if (hashTable[index] != null && hashTable[index].equals(key))
-        {
-            hashTable[index] = null;
-            --size;
-        }
-
-        else
-        {
-            return false;
-        }
-
-        return true;
+        return this.hashTable[index].delete(key);
     }
 
     public boolean search(String key)
     {
         int index = hashFunction.hash(key) % capacity;
-
-        if (hashTable[index] != null && hashTable[index].equals(key))
-        {
-            return true;
-        }
-
-        return false;
+        return this.hashTable[index].search(key);
     }
 
 

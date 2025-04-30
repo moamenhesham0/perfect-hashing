@@ -1,0 +1,6 @@
+perfecthashing/hashing/UniversalHashing.class
+perfecthashing/hashing/PerfectHashTableQuadratic.class
+perfecthashing/dictionary/PerfectHashDictionary.class
+perfecthashing/hashing/IPerfectHashTable.class
+perfecthashing/Main.class
+perfecthashing/hashing/PerfectHashTableLinear.class
