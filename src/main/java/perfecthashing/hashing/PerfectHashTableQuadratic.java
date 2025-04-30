@@ -2,7 +2,7 @@ package perfecthashing.hashing;
 
 import java.util.*;
 
-public class PerfectHashTableQuadratic {
+public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
     private String[] hashTable;
     private List<String> keys;
@@ -33,7 +33,7 @@ public class PerfectHashTableQuadratic {
             this.hashTable = new String[capacity];
 
             for (String key : keys) {
-                int index = hashFunction.hash(key) % capacity;
+                int index = hashFunction.hash(key);
 
                 if (this.hashTable[index] == null) {
                     this.hashTable[index] = key;
@@ -55,7 +55,7 @@ public class PerfectHashTableQuadratic {
     }
 
     public boolean insert(String key) {
-        int index = hashFunction.hash(key) % capacity;
+        int index = hashFunction.hash(key);
 
         keys.add(key);
         ++size;
@@ -76,7 +76,7 @@ public class PerfectHashTableQuadratic {
     }
 
     public boolean delete(String key) {
-        int index = hashFunction.hash(key) % capacity;
+        int index = hashFunction.hash(key);
 
         if (hashTable[index] != null && hashTable[index].equals(key)) {
             hashTable[index] = null;
@@ -91,7 +91,7 @@ public class PerfectHashTableQuadratic {
     }
 
     public boolean search(String key) {
-        int index = hashFunction.hash(key) % capacity;
+        int index = hashFunction.hash(key);
 
         if (hashTable[index] != null && hashTable[index].equals(key)) {
             return true;
