@@ -5,8 +5,7 @@ import java.util.*;
 public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
 
-    private static final double LOG_2 = Math.log(2);
-    private static final int DEFAULT_CAPACITY = 0;
+    private static final int DEFAULT_CAPACITY = 100;
     private static final int INITIAL_SIZE = 0;
 
     private String[] hashTable;
@@ -33,7 +32,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
         for(String key : keys)
         {
-            this.insert(key);
+            insert(key);
         }
     }
 
@@ -55,7 +54,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
     public static final int computeUBits(int capacity)
     {
-        return (int) Math.floor(Math.log(capacity) / LOG_2);
+        return (int) Math.floor(Math.log(capacity) / Math.log(2));
     }
 
 
@@ -150,25 +149,16 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
             this.hashTable[index] = null;
             --this.size;
             this.keys.remove(key);
-        }
-        else
-        {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Override
     public boolean search(String key)
     {
         int index = this.hashFunction.hash(key);
-
-        if (this.hashTable[index] != null && this.hashTable[index].equals(key))
-        {
-            return true;
-        }
-
-        return false;
+        return (this.hashTable[index] != null && this.hashTable[index].equals(key));
     }
 }
