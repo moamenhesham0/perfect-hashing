@@ -6,6 +6,8 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
 
     private static final double LOG_2 = Math.log(2);
+    private static final int DEFAULT_CAPACITY = 0;
+    private static final int INITIAL_SIZE = 0;
 
     private String[] hashTable;
     private List<String> keys;
@@ -13,12 +15,49 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     private int capacity;
     private UniversalHashing hashFunction;
 
+
+    /* Constructors */
+
+     public PerfectHashTableQuadratic(int capacity)
+    {
+        this.capacity = capacity * capacity;
+        this.size = INITIAL_SIZE;
+        this.hashTable = new String[this.capacity];
+        this.keys = new ArrayList<>();
+        this.hashFunction = new UniversalHashing(Integer.SIZE, computeUBits(capacity));
+    }
+
+    public PerfectHashTableQuadratic(List<String> keys)
+    {
+        this(keys.size());
+
+        for(String key : keys)
+        {
+            this.insert(key);
+        }
+    }
+
+    /* Default Constructor */
+
+    public PerfectHashTableQuadratic()
+    {
+        this(DEFAULT_CAPACITY);
+    }
+
+
+
+
+
+
+
+
     /* Computes the number of bits needed in the hash function matrix row dimension */
 
     public static final int computeUBits(int capacity)
     {
         return (int) Math.floor(Math.log(capacity) / LOG_2);
     }
+
 
     /* Rehashes the hash table when a collision occurs.
        This is resets the hash set to a new hash set and reinserts the keys */
@@ -55,16 +94,12 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
 
     /* Resizes the capacity to keep the relation (capacity >= size^2) */
+
     private void resizeHashTable()
     {
         int newCapacity = this.size * this.size;
 
-        String[] newHashTable = new String[newCapacity];
-
-        for(int i = 0 ; i<this.capacity ; ++i)
-        {
-            newHashTable[i] = this.hashTable[i];
-        }
+        String[] newHashTable = Arrays.copyOf(this.hashTable, newCapacity);
 
         this.capacity = newCapacity;
         this.hashTable = newHashTable;
@@ -72,44 +107,9 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
 
 
-    public PerfectHashTableQuadratic(List<String> keys)
+    @Override
+    public boolean insert(String key)
     {
-
-        final int capacity = keys.size();
-
-        this.capacity = capacity * capacity;
-        this.size = 0;
-        this.hashTable = new String[this.capacity];
-        this.keys = new ArrayList<>();
-        this.hashFunction = new UniversalHashing(Integer.SIZE, PerfectHashTableQuadratic.computeUBits(capacity));
-
-        for(String key : keys)
-        {
-            this.insert(key);
-        }
-
-    }
-
-    public PerfectHashTableQuadratic(int capacity)
-    {
-        this.capacity = capacity * capacity;
-        this.size = 0;
-        this.hashTable = new String[this.capacity];
-        this.keys = new ArrayList<>();
-        this.hashFunction = new UniversalHashing(Integer.SIZE, computeUBits(capacity));
-    }
-
-    /* Default Constructor */
-    public PerfectHashTableQuadratic()
-    {
-        this(0);
-    }
-
-
-
-
-
-    public boolean insert(String key) {
         int index = this.hashFunction.hash(key);
 
         // Returns false on existing dictionary entry
@@ -117,7 +117,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         {
             return false;
         }
-
 
         keys.add(key);
         ++this.size;
@@ -141,7 +140,9 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         return true;
     }
 
-    public boolean delete(String key) {
+    @Override
+    public boolean delete(String key)
+    {
         int index = this.hashFunction.hash(key);
 
         if (this.hashTable[index] != null && this.hashTable[index].equals(key))
@@ -157,7 +158,9 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         return true;
     }
 
-    public boolean search(String key) {
+    @Override
+    public boolean search(String key)
+    {
         int index = this.hashFunction.hash(key);
 
         if (this.hashTable[index] != null && this.hashTable[index].equals(key))
