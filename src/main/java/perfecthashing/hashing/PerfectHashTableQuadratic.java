@@ -118,7 +118,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
             return false;
         }
 
-        keys.add(key);
+        this.keys.add(key);
         ++this.size;
 
         // Resizes the hash table on capacity < size^2
@@ -149,6 +149,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         {
             this.hashTable[index] = null;
             --this.size;
+            this.keys.remove(key);
         }
         else
         {
