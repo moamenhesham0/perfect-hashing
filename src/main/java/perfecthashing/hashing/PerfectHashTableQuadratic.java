@@ -44,12 +44,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     }
 
 
-
-
-
-
-
-
     /* Computes the number of bits needed in the hash function matrix row dimension */
 
     public static final int computeUBits(int capacity)
