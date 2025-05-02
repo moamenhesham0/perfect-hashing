@@ -71,6 +71,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
 
         this.hashTable = newHashTable;
         this.capacity = newCapacity;
+        this.size = INITIAL_SIZE;
 
         this.rehash();
     }
