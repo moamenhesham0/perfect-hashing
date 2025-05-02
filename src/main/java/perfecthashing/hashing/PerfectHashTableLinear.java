@@ -1,5 +1,6 @@
 package perfecthashing.hashing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 public class PerfectHashTableLinear implements IPerfectHashTable {
@@ -10,7 +11,8 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     private PerfectHashTableQuadratic[] hashTable;
     private int capacity;
     private int size;
-    private final UniversalHashing hashFunction;
+    private List<String> keys;
+    private UniversalHashing hashFunction;
 
 
 
@@ -18,6 +20,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     {
         this.capacity = capacity;
         this.size = INITIAL_SIZE;
+        this.keys = new ArrayList();
         this.hashTable = new PerfectHashTableQuadratic[this.capacity];
         this.hashFunction = new UniversalHashing(Integer.SIZE, PerfectHashTableQuadratic.computeUBits(this.capacity));
 
@@ -46,26 +49,31 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     }
 
 
+    private void rehash()
+    {
+        this.hashFunction = new UniversalHashing(Integer.SIZE, PerfectHashTableQuadratic.computeUBits(this.capacity));
+
+        for(String key : this.keys)
+        {
+            this.insert(key);
+        }
+    }
 
     private void resizeHashTable()
     {
         final int newCapacity = this.size * 2;
         PerfectHashTableQuadratic[] newHashTable = new PerfectHashTableQuadratic[newCapacity];
 
-        for(int i = 0; i < this.capacity; i++) {
-            newHashTable[i] = this.hashTable[i];
-        }
-
-        for(int i = this.capacity; i < newCapacity; i++) {
+        for(int i = 0; i < newCapacity; i++)
+        {
             newHashTable[i] = new PerfectHashTableQuadratic();
         }
 
         this.hashTable = newHashTable;
         this.capacity = newCapacity;
+
+        this.rehash();
     }
-
-
-
 
 
     @Override
@@ -81,6 +89,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
         if(this.hashTable[index].insert(key))
         {
             ++this.size;
+            this.keys.add(key);
             return true;
         }
 
@@ -95,6 +104,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
         if (this.hashTable[index].delete(key))
         {
             --this.size;
+            this.keys.remove(key);
             return true;
         }
 

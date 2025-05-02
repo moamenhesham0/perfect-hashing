@@ -5,7 +5,7 @@ import java.util.*;
 public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
 
-    private static final int DEFAULT_CAPACITY = 100;
+    private static final int DEFAULT_CAPACITY = 16;
     private static final int INITIAL_SIZE = 0;
 
     private String[] hashTable;
@@ -90,12 +90,8 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
     private void resizeHashTable()
     {
-        int newCapacity = this.size * this.size;
-
-        String[] newHashTable = Arrays.copyOf(this.hashTable, newCapacity);
-
-        this.capacity = newCapacity;
-        this.hashTable = newHashTable;
+        this.capacity = this.size * this.size;
+        this.rehash();
     }
 
 
