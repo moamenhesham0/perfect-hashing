@@ -22,11 +22,10 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
         this.size = INITIAL_SIZE;
         this.keys = new ArrayList();
         this.hashTable = new PerfectHashTableQuadratic[this.capacity];
-        this.hashFunction = new UniversalHashing(Integer.SIZE, PerfectHashTableQuadratic.computeUBits(this.capacity));
-
-        for(PerfectHashTableQuadratic perfectHashTable : hashTable)
+        this.hashFunction = new UniversalHashing(Integer.SIZE,this.capacity);
+        for(int i = 0; i < this.capacity; i++)
         {
-            perfectHashTable = new PerfectHashTableQuadratic();
+            this.hashTable[i] = new PerfectHashTableQuadratic();
         }
     }
 
@@ -51,7 +50,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
 
     private void rehash()
     {
-        this.hashFunction = new UniversalHashing(Integer.SIZE, PerfectHashTableQuadratic.computeUBits(this.capacity));
+        this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
 
         for(String key : this.keys)
         {
@@ -85,7 +84,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
             this.resizeHashTable();
         }
 
-        final int index = hashFunction.hash(key) % capacity;
+        final int index = hashFunction.hash(key);
 
         if(this.hashTable[index].insert(key))
         {
@@ -100,7 +99,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     @Override
     public boolean delete(final String key)
     {
-        final int index = hashFunction.hash(key) % capacity;
+        final int index = hashFunction.hash(key);
 
         if (this.hashTable[index].delete(key))
         {
@@ -115,7 +114,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     @Override
     public boolean search(final String key)
     {
-        final int index = hashFunction.hash(key) % capacity;
+        final int index = hashFunction.hash(key);
         return this.hashTable[index].search(key);
     }
 

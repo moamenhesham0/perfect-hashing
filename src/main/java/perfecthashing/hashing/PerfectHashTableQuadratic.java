@@ -23,7 +23,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         this.size = INITIAL_SIZE;
         this.hashTable = new String[this.capacity];
         this.keys = new ArrayList<>();
-        this.hashFunction = new UniversalHashing(Integer.SIZE, computeUBits(capacity));
+        this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
     }
 
     public PerfectHashTableQuadratic(List<String> keys)
@@ -44,14 +44,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     }
 
 
-    /* Computes the number of bits needed in the hash function matrix row dimension */
-
-    public static final int computeUBits(int capacity)
-    {
-        return (int) Math.floor(Math.log(capacity) / Math.log(2));
-    }
-
-
     /* Rehashes the hash table when a collision occurs.
        This is resets the hash set to a new hash set and reinserts the keys */
 
@@ -62,7 +54,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         {
             newSize = 0;
 
-            this.hashFunction = new UniversalHashing(Integer.SIZE, computeUBits(capacity));
+            this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
 
             this.hashTable = new String[capacity];
 
