@@ -86,11 +86,11 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     }
 
 
-    /* Resizes the capacity to keep the relation (capacity >= size^2) */
+    /* Resizes the capacity to ((2*size)^2) in order to keep the relation (capacity >= size^2) */
 
     private void resizeHashTable()
     {
-        this.capacity = this.size * this.size;
+        this.capacity = this.size * this.size * 4;
         this.rehash();
     }
 
