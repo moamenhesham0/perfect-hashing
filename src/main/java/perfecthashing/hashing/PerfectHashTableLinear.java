@@ -54,7 +54,8 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
 
         for(String key : this.keys)
         {
-            this.insert(key);
+            final int index = hashFunction.hash(key);
+            this.hashTable[index].insert(key);
         }
     }
 
