@@ -41,6 +41,11 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         this(DEFAULT_CAPACITY);
     }
 
+    public String[] getHashTable()
+    {
+        return this.hashTable;
+    }
+
 
     /* Rehashes the hash table when a collision occurs.
        This is resets the hash set to a new hash set and reinserts the keys */
