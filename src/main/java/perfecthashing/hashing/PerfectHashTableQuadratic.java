@@ -50,16 +50,16 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
     /* Reinsertion sub-routine in rehashing */
 
-    private boolean reinsert(String key)
+    private boolean reinsert(String key , String[] newHashTable)
     {
         final int index = this.hashFunction.hash(key);
 
-        if (this.hashTable[index] != null)
+        if (newHashTable[index] != null)
         {
             return false;
         }
 
-        this.hashTable[index] = key;
+        newHashTable[index] = key;
         return true;
     }
 
@@ -69,12 +69,11 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
     private void rehash(String collisionKey)
     {
-        int newSize = 0;
+        boolean success = false;
         String[] newHashTable = new String[this.capacity];
-        while (newSize < this.size)
+        while (!success)
         {
-            newSize = 0;
-
+            success = true;
             this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
 
             newHashTable = new String[capacity];
@@ -86,19 +85,20 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
                     continue;
                 }
 
-                if(!this.reinsert(key))
+                if(!this.reinsert(key , newHashTable))
                 {
+                    success = false;
                     break;
                 }
 
-                ++newSize;
+
             }
 
-            if(collisionKey != null)
+            if(collisionKey != null && success)
             {
-                newSize += this.reinsert(collisionKey) ? 1 : 0;
+                success &= this.reinsert(collisionKey , newHashTable);
             }
-
+            
         }
 
         this.hashTable = newHashTable;

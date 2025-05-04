@@ -45,7 +45,7 @@ public class PerfectHashDictionary {
             String line;
             int newlyAdded = 0;
             int alreadyExisting = 0;
-            
+
             while ((line = reader.readLine()) != null) {
                 String key = line.trim();
                 if (!key.isEmpty()) {
@@ -55,8 +55,12 @@ public class PerfectHashDictionary {
                         alreadyExisting++;
                     }
                 }
+
+                if(newlyAdded % 1 == 0) {
+                    System.out.println("Inserted " + newlyAdded + " keys so far...");
+                }
             }
-            
+
             return new int[] { newlyAdded, alreadyExisting };
         } catch (IOException e) {
             System.err.println("Error reading from file: " + e.getMessage());
@@ -69,7 +73,7 @@ public class PerfectHashDictionary {
             String line;
             int deleted = 0;
             int nonExisting = 0;
-            
+
             while ((line = reader.readLine()) != null) {
                 String key = line.trim();
                 if (!key.isEmpty()) {
@@ -80,7 +84,7 @@ public class PerfectHashDictionary {
                     }
                 }
             }
-            
+
             return new int[] { deleted, nonExisting };
         } catch (IOException e) {
             System.err.println("Error reading from file: " + e.getMessage());
