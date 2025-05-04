@@ -9,7 +9,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     private static final int INITIAL_SIZE = 0;
 
     private String[] hashTable;
-    private List<String> keys;
     private int size;
     private int capacity;
     private UniversalHashing hashFunction;
@@ -22,7 +21,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         this.capacity = capacity * capacity;
         this.size = INITIAL_SIZE;
         this.hashTable = new String[this.capacity];
-        this.keys = new ArrayList<>();
         this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
     }
 
@@ -50,21 +48,24 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     private void rehash()
     {
         int newSize = 0;
+        String[] newHashTable = new String[this.capacity];
         while (newSize < this.size)
         {
             newSize = 0;
 
             this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
 
-            this.hashTable = new String[capacity];
+            newHashTable = new String[capacity];
 
-            for (String key : keys)
+            for (String key : this.hashTable)
             {
+
+                if(key == null) continue;
                 int index = hashFunction.hash(key);
 
-                if (this.hashTable[index] == null)
+                if (newHashTable[index] == null)
                 {
-                    this.hashTable[index] = key;
+                    newHashTable[index] = key;
                     ++newSize;
                 }
                 else
@@ -75,6 +76,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
             }
 
         }
+        this.hashTable = newHashTable;
     }
 
 
@@ -99,8 +101,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
             return false;
         }
 
-        this.keys.add(key);
-        ++this.size;
 
         // Resizes the hash table on capacity < size^2
         if(this.size * this.size > this.capacity)
@@ -112,6 +112,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         if (this.hashTable[index] == null)
         {
             this.hashTable[index] = key;
+            ++this.size;
         }
         else
         {
@@ -130,7 +131,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         {
             this.hashTable[index] = null;
             --this.size;
-            this.keys.remove(key);
             return true;
         }
 
