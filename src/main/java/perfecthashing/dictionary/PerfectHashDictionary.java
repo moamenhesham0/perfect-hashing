@@ -4,23 +4,27 @@ import java.util.*;
 
 import perfecthashing.hashing.*;
 
+
 public class PerfectHashDictionary {
     private IPerfectHashTable backend;
-    private List<String> keys;
     private String type;
 
     public PerfectHashDictionary(String type, List<String> keys) {
         this.type = type;
-        this.keys = new ArrayList<>(keys);
-        build();
+        build(keys);
     }
 
-    private void build() {
-        if (type.equals("quadratic")) {
-            backend = new PerfectHashTableQuadratic(keys);
-        } else {
-            backend = new PerfectHashTableLinear(keys);
+    private void build(List<String> keys) {
+
+        if (type.equals("quadratic"))
+        {
+            backend = (!keys.isEmpty()) ? new PerfectHashTableQuadratic(keys) : new PerfectHashTableQuadratic();
         }
+        else
+        {
+            backend = (!keys.isEmpty()) ? new PerfectHashTableLinear(keys) : new PerfectHashTableLinear();
+        }
+
     }
 
     public boolean search(String key) {

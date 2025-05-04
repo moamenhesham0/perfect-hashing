@@ -62,6 +62,8 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
                 this.hashTable[index].insert(key);
             }
         }
+
+
     }
 
     private void resizeHashTable()

@@ -47,10 +47,27 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     }
 
 
+
+    /* Reinsertion sub-routine in rehashing */
+
+    private boolean reinsert(String key)
+    {
+        final int index = this.hashFunction.hash(key);
+
+        if (this.hashTable[index] != null)
+        {
+            return false;
+        }
+
+        this.hashTable[index] = key;
+        return true;
+    }
+
+
     /* Rehashes the hash table when a collision occurs.
        This is resets the hash set to a new hash set and reinserts the keys */
 
-    private void rehash()
+    private void rehash(String collisionKey)
     {
         int newSize = 0;
         String[] newHashTable = new String[this.capacity];
@@ -64,25 +81,30 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
             for (String key : this.hashTable)
             {
-
-                if(key == null) continue;
-                int index = hashFunction.hash(key);
-
-                if (newHashTable[index] == null)
+                if(key == null)
                 {
-                    newHashTable[index] = key;
-                    ++newSize;
+                    continue;
                 }
-                else
+
+                if(!this.reinsert(key))
                 {
                     break;
                 }
 
+                ++newSize;
+            }
+
+            if(collisionKey != null)
+            {
+                newSize += this.reinsert(collisionKey) ? 1 : 0;
             }
 
         }
+
         this.hashTable = newHashTable;
     }
+
+
 
 
     /* Resizes the capacity to ((2*size)^2) in order to keep the relation (capacity >= size^2) */
@@ -90,7 +112,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     private void resizeHashTable()
     {
         this.capacity = this.size * this.size * 4;
-        this.rehash();
+        this.rehash(null);
     }
 
 
@@ -108,20 +130,20 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
 
         // Resizes the hash table on capacity < size^2
-        if(this.size * this.size > this.capacity)
+        if(this.size * this.size >= this.capacity)
         {
             this.resizeHashTable();
         }
 
+        ++this.size;
 
         if (this.hashTable[index] == null)
         {
             this.hashTable[index] = key;
-            ++this.size;
         }
         else
         {
-            this.rehash();
+            this.rehash(key);
         }
 
         return true;
