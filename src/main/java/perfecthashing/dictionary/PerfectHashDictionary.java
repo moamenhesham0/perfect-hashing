@@ -1,6 +1,7 @@
 package perfecthashing.dictionary;
 
 import java.util.*;
+import java.io.*;
 
 import perfecthashing.hashing.*;
 
@@ -39,13 +40,51 @@ public class PerfectHashDictionary {
         return backend.insert(key);
     }
 
-    public boolean batchInsert(final String filePath) {
-        // TODO: Implement a function to read from a file and insert
-        throw new UnsupportedOperationException("Batch insert from file is coming in a future release");
+    public int[] batchInsert(final String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int newlyAdded = 0;
+            int alreadyExisting = 0;
+            
+            while ((line = reader.readLine()) != null) {
+                String key = line.trim();
+                if (!key.isEmpty()) {
+                    if (insert(key)) {
+                        newlyAdded++;
+                    } else {
+                        alreadyExisting++;
+                    }
+                }
+            }
+            
+            return new int[] { newlyAdded, alreadyExisting };
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + e.getMessage());
+            return null;
+        }
     }
 
-    public boolean batchDelete(final String filePath) {
-        // TODO: Implement a function to read from a file and delete
-        throw new UnsupportedOperationException("Batch delete from file is coming in a future release");
+    public int[] batchDelete(final String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int deleted = 0;
+            int nonExisting = 0;
+            
+            while ((line = reader.readLine()) != null) {
+                String key = line.trim();
+                if (!key.isEmpty()) {
+                    if (delete(key)) {
+                        deleted++;
+                    } else {
+                        nonExisting++;
+                    }
+                }
+            }
+            
+            return new int[] { deleted, nonExisting };
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + e.getMessage());
+            return null;
+        }
     }
 }

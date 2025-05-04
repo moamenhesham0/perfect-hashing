@@ -8,6 +8,7 @@ public class DictionaryCLI {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         PerfectHashDictionary dictionary = null;
+        String lastMessage = "";
 
         System.out.println("=== Perfect Hash Dictionary ===");
         System.out.print("Choose backend type (quadratic / linear): ");
@@ -18,76 +19,133 @@ public class DictionaryCLI {
         List<String> initialKeys = line.isEmpty() ? new ArrayList<>() : Arrays.asList(line.split("\\s+"));
 
         dictionary = new PerfectHashDictionary(type, initialKeys);
-        System.out.println("Dictionary initialized with backend: " + type);
+        lastMessage = "Dictionary initialized with backend: " + type;
 
         while (true) {
-            System.out.println("\nChoose operation:");
-            System.out.println("1. insert <word>");
-            System.out.println("2. delete <word>");
-            System.out.println("3. search <word>");
-            System.out.println("4. batch_insert <file_path>");
-            System.out.println("5. batch_delete <file_path>");
+            // Clear screen
+            clearScreen();
+            
+            // Display last message at the top
+            if (!lastMessage.isEmpty()) {
+                System.out.println(lastMessage);
+            }
+            
+            System.out.println("Choose Number from 1 to 6 for operation:");
+            System.out.println("1. insert");
+            System.out.println("2. delete");
+            System.out.println("3. search");
+            System.out.println("4. batch_insert");
+            System.out.println("5. batch_delete");
             System.out.println("6. exit");
 
             System.out.print("> ");
-            String[] input = scanner.nextLine().trim().split("\\s+", 2);
-
-            if (input.length == 0 || input[0].isEmpty()) continue;
-
-            String command = input[0].toLowerCase();
-            String argument = input.length > 1 ? input[1] : "";
-
-                switch (command) {
-                    case "insert":
-                        if (argument.isEmpty()) {
-                            System.out.println("Please provide a word to insert.");
-                            break;
-                        }
-                        boolean inserted = dictionary.insert(argument);
-                        System.out.println(inserted ? "Inserted." : "Word already exists.");
+            String input = scanner.nextLine().trim();
+            
+            // Check if input is empty
+            if (input.isEmpty()) {
+                lastMessage = "Please enter a command.";
+                continue;
+            }
+            
+            // Get the first character as command
+            char firstChar = input.charAt(0);
+            
+            switch (firstChar) {
+                case '1': // insert
+                    System.out.print("Enter word to insert: ");
+                    String wordToInsert = scanner.nextLine().trim();
+                    if (wordToInsert.isEmpty()) {
+                        lastMessage = "Please provide a word to insert.";
                         break;
+                    }
+                    boolean inserted = dictionary.insert(wordToInsert);
+                    lastMessage = inserted ? "Word '" + wordToInsert + "' inserted." : 
+                                           "Word '" + wordToInsert + "' already exists.";
+                    break;
 
-                    case "delete":
-                        if (argument.isEmpty()) {
-                            System.out.println("Please provide a word to delete.");
-                            break;
-                        }
-                        boolean deleted = dictionary.delete(argument);
-                        System.out.println(deleted ? "Deleted." : "Word not found.");
+                case '2': // delete
+                    System.out.print("Enter word to delete: ");
+                    String wordToDelete = scanner.nextLine().trim();
+                    if (wordToDelete.isEmpty()) {
+                        lastMessage = "Please provide a word to delete.";
                         break;
+                    }
+                    boolean deleted = dictionary.delete(wordToDelete);
+                    lastMessage = deleted ? "Word '" + wordToDelete + "' deleted." : 
+                                          "Word '" + wordToDelete + "' not found.";
+                    break;
 
-                    case "search":
-                        if (argument.isEmpty()) {
-                            System.out.println("Please provide a word to search.");
-                            break;
-                        }
-                        boolean found = dictionary.search(argument);
-                        System.out.println(found ? "Word exists." : "Word not found.");
+                case '3': // search
+                    System.out.print("Enter word to search: ");
+                    String wordToSearch = scanner.nextLine().trim();
+                    if (wordToSearch.isEmpty()) {
+                        lastMessage = "Please provide a word to search.";
                         break;
+                    }
+                    boolean found = dictionary.search(wordToSearch);
+                    lastMessage = found ? "Word '" + wordToSearch + "' exists." : 
+                                        "Word '" + wordToSearch + "' not found.";
+                    break;
 
-                    case "batch_insert":
-                        if (argument.isEmpty()) {
-                            System.out.println("Please provide a file path.");
-                            break;
-                        }
-                        dictionary.batchInsert(argument);
+                case '4': // batch_insert
+                    System.out.print("Enter file path for batch insert: ");
+                    String insertFilePath = scanner.nextLine().trim();
+                    if (insertFilePath.isEmpty()) {
+                        lastMessage = "Please provide a file path.";
                         break;
+                    }
+ 
+                    int[] insertResults = dictionary.batchInsert(insertFilePath);
+                    if (insertResults == null) {
+                        lastMessage = "Failed to perform batch insert operation.";
+                    } else {
+                        lastMessage = String.format("Batch insert completed: %d newly added, %d already existing", 
+                                                  insertResults[0], insertResults[1]);
+                    }
+                    break;
 
-                    case "batch_delete":
-                        if (argument.isEmpty()) {
-                            System.out.println("Please provide a file path.");
-                            break;
-                        }
-                        dictionary.batchDelete(argument);
+                case '5': // batch_delete
+                    System.out.print("Enter file path for batch delete: ");
+                    String deleteFilePath = scanner.nextLine().trim();
+                    if (deleteFilePath.isEmpty()) {
+                        lastMessage = "Please provide a file path.";
                         break;
+                    }
+                   
+                    int[] deleteResults = dictionary.batchDelete(deleteFilePath);
+                    if (deleteResults == null) {
+                        lastMessage = "Failed to perform batch delete operation.";
+                    } else {
+                        lastMessage = String.format("Batch delete completed: %d deleted, %d non-existing", 
+                                                  deleteResults[0], deleteResults[1]);
+                    }
+                    break;
 
-                    case "exit":
-                        System.out.println("Exiting.");
-                        return;
+                case '6': // exit
+                    System.out.println("Exiting.");
+                    scanner.close();
+                    return;
 
-                    default:
-                        System.out.println("Unknown command.");
-                }
+                default:
+                    lastMessage = "Unknown command. Please enter a number between 1 and 6.";
+            }
+        }
+    }
+    
+    // Method to clear the console screen
+    private static void clearScreen() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            // Fallback if clearing fails
+            for (int i = 0; i < 50; i++) {
+                System.out.println();
+            }
         }
     }
 }
