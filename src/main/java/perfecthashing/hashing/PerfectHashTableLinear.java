@@ -11,7 +11,6 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     private PerfectHashTableQuadratic[] hashTable;
     private int capacity;
     private int size;
-    private List<String> keys;
     private UniversalHashing hashFunction;
 
 
@@ -20,7 +19,6 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     {
         this.capacity = capacity;
         this.size = INITIAL_SIZE;
-        this.keys = new ArrayList();
         this.hashTable = new PerfectHashTableQuadratic[this.capacity];
         this.hashFunction = new UniversalHashing(Integer.SIZE,this.capacity);
         for(int i = 0; i < this.capacity; i++)
@@ -51,27 +49,22 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     private void rehash()
     {
         this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
+        PerfectHashTableQuadratic[] newHashTable = new PerfectHashTableQuadratic[this.capacity];
 
-        for(String key : this.keys)
+        for(PerfectHashTableQuadratic table : this.hashTable)
         {
-            final int index = hashFunction.hash(key);
-            this.hashTable[index].insert(key);
+            for(String key : table)
+            {
+                if(key == null) continue;
+                final int index = hashFunction.hash(key);
+                this.hashTable[index].insert(key);
+            }
         }
     }
 
     private void resizeHashTable()
     {
-        final int newCapacity = this.size * 2;
-        PerfectHashTableQuadratic[] newHashTable = new PerfectHashTableQuadratic[newCapacity];
-
-        for(int i = 0; i < newCapacity; i++)
-        {
-            newHashTable[i] = new PerfectHashTableQuadratic();
-        }
-
-        this.hashTable = newHashTable;
-        this.capacity = newCapacity;
-
+        this.capacity = this.size * 2;
         this.rehash();
     }
 
