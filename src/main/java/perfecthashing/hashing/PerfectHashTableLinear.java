@@ -49,10 +49,19 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     private void rehash()
     {
         this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
-        PerfectHashTableQuadratic[] newHashTable = new PerfectHashTableQuadratic[this.capacity];
+        PerfectHashTableQuadratic[] oldHashTable = this.hashTable;
+        this.hashTable = new PerfectHashTableQuadratic[this.capacity];
 
-        for(PerfectHashTableQuadratic bucket : this.hashTable)
+
+        for(int i = 0; i < this.capacity; i++)
         {
+            this.hashTable[i] = new PerfectHashTableQuadratic();
+        }
+
+        for(PerfectHashTableQuadratic bucket : oldHashTable)
+        {
+            if(bucket.getSize() == 0) continue;
+            
             String[] table = bucket.getHashTable();
 
             for(String key : table)
@@ -62,8 +71,6 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
                 this.hashTable[index].insert(key);
             }
         }
-
-
     }
 
     private void resizeHashTable()

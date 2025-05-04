@@ -46,20 +46,25 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         return this.hashTable;
     }
 
+    public int getSize()
+    {
+        return this.size;
+    }
+
 
 
     /* Reinsertion sub-routine in rehashing */
 
-    private boolean reinsert(String key , String[] newHashTable)
+    private boolean reinsert(String key )
     {
         final int index = this.hashFunction.hash(key);
 
-        if (newHashTable[index] != null)
+        if (this.hashTable[index] != null)
         {
             return false;
         }
 
-        newHashTable[index] = key;
+        this.hashTable[index] = key;
         return true;
     }
 
@@ -70,22 +75,22 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     private void rehash(String collisionKey)
     {
         boolean success = false;
-        String[] newHashTable = new String[this.capacity];
+        String[] oldHashTable = this.hashTable;
         while (!success)
         {
             success = true;
             this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
 
-            newHashTable = new String[capacity];
+            this.hashTable = new String[this.capacity];
 
-            for (String key : this.hashTable)
+            for (String key : oldHashTable)
             {
                 if(key == null)
                 {
                     continue;
                 }
 
-                if(!this.reinsert(key , newHashTable))
+                if(!this.reinsert(key))
                 {
                     success = false;
                     break;
@@ -94,14 +99,12 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
             }
 
-            if(collisionKey != null && success)
+            if(collisionKey != null)
             {
-                success &= this.reinsert(collisionKey , newHashTable);
+                success &= this.reinsert(collisionKey);
             }
-            
-        }
 
-        this.hashTable = newHashTable;
+        }
     }
 
 
