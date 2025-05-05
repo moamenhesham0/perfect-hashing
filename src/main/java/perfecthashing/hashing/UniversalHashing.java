@@ -5,9 +5,9 @@ import java.util.*;
 public class UniversalHashing {
     private final int[][] matrix;
     private final int b, u;
-    private final int capacity;
+    private final long capacity;
 
-    public UniversalHashing(int b, int capacity) {
+    public UniversalHashing(int b, long capacity) {
         this.b = b;
         this.u = computeUBits(capacity);
         this.capacity = capacity;
@@ -37,15 +37,33 @@ public class UniversalHashing {
             }
             result[i] = sum % 2;
         }
-        // Convert the binary key vector to long
-        return (int)(toInt(result) % capacity);
+        
+        // Convert the binary key vector to long and ensure positive index
+        long hashValue = toInt(result);
+        int index = Math.abs((int)(hashValue % capacity));
+        return index;
     }
 
     private int[] toBits(String key, int u) {
-        int hash = key.hashCode();
+        // Improve the hashing to reduce collisions
+        long hash = 0;
+        
+        // Use multiple mixing techniques for better distribution
+        for (int i = 0; i < key.length(); i++) {
+            hash = 31 * hash + key.charAt(i);
+            // Add rotations for better bit distribution
+            hash = (hash << 5) | (hash >>> 59); // 5-bit left rotation
+        }
+        
+        // Add key length influence
+        hash = hash ^ key.length();
+        
+        // Ensure we get positive values
+        hash = Math.abs(hash);
+        
         int[] bits = new int[u];
         for (int i = 0; i < u; i++) {
-            bits[i] = (hash >> i) & 1;
+            bits[i] = (int)((hash >> i) & 1);
         }
         return bits;
     }
@@ -60,8 +78,9 @@ public class UniversalHashing {
     }
 
     /* Computes the number of bits needed in the hash function matrix row dimension */
-    private int computeUBits(int capacity)
+    private int computeUBits(long capacity)
     {
-        return (int) Math.floor(Math.log(capacity) / Math.log(2));
+        // Increase the bit size to reduce collision probability
+        return Math.max(32, (int) Math.ceil(Math.log(capacity) / Math.log(2)) * 2);
     }
 }
