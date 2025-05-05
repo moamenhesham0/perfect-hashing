@@ -3,7 +3,7 @@ package perfecthashing.hashing;
 import java.util.List;
 public class PerfectHashTableLinear implements IPerfectHashTable {
 
-    private static final int DEFAULT_CAPACITY = 50;
+    private static final int DEFAULT_CAPACITY = 5;
     private static final int INITIAL_SIZE = 0;
 
     private PerfectHashTableQuadratic[] hashTable;

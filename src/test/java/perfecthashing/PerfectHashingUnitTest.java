@@ -370,7 +370,7 @@ public class PerfectHashingUnitTest
 
         List<String> keys = Arrays.asList(
             "aaaaa", "aaaab", "aaaac", "aaaad", "aaaae",
-            "abaaa", "aabaa", "aaaba", "aaaab",
+            "abaaa", "aabaa", "aaaba",
             "0a0a0", "0a0a1", "0a0b0", "0a1a0", "1a0a0",
             "abcde", "abcdf", "abcdg", "abcdh",
             "Aa", "BB",

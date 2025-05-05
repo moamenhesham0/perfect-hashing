@@ -11,7 +11,7 @@ public class UniversalHashing {
         this.b = b;
         this.u = computeUBits(capacity);
         this.capacity = capacity;
-        this.matrix = new int[b][u];
+        this.matrix = new int[this.b][this.u];
         GenerateRandomHash();
     }
 
@@ -37,7 +37,7 @@ public class UniversalHashing {
             }
             result[i] = sum % 2;
         }
-        
+
         // Convert the binary key vector to long and ensure positive index
         long hashValue = toInt(result);
         int index = Math.abs((int)(hashValue % capacity));
@@ -47,20 +47,20 @@ public class UniversalHashing {
     private int[] toBits(String key, int u) {
         // Improve the hashing to reduce collisions
         long hash = 0;
-        
+
         // Use multiple mixing techniques for better distribution
         for (int i = 0; i < key.length(); i++) {
             hash = 31 * hash + key.charAt(i);
             // Add rotations for better bit distribution
             hash = (hash << 5) | (hash >>> 59);
         }
-        
+
         // Add key length influence
         hash = hash ^ key.length();
-        
+
         // Ensure we get positive values
         hash = Math.abs(hash);
-        
+
         int[] bits = new int[u];
         for (int i = 0; i < u; i++) {
             bits[i] = (int)((hash >> i) & 1);
@@ -80,10 +80,11 @@ public class UniversalHashing {
     /* Computes the number of bits needed in the hash function matrix row dimension */
     private int computeUBits(int capacity) {
         int bitsNeeded = (int) (Math.ceil(Math.log(capacity) / Math.log(2)) * 3);
-        
+
         int maxBits = 512;  // Upper limit to prevent excessive memory usage
         int minBits = 32;   // Lower limit to ensure good distribution
-        
+
         return Math.min(maxBits, Math.max(minBits, bitsNeeded));
     }
 }
+
