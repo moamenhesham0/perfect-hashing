@@ -1,9 +1,13 @@
 package perfecthashing.dictionary;
 
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
 
-import perfecthashing.hashing.*;
+import perfecthashing.hashing.IPerfectHashTable;
+import perfecthashing.hashing.PerfectHashTableLinear;
+import perfecthashing.hashing.PerfectHashTableQuadratic;
 
 
 public class PerfectHashDictionary {
@@ -26,6 +30,14 @@ public class PerfectHashDictionary {
             backend = (!keys.isEmpty()) ? new PerfectHashTableLinear(keys) : new PerfectHashTableLinear();
         }
 
+    }
+
+    public PerfectHashTableLinear getBackend() {
+        if (backend instanceof PerfectHashTableLinear) {
+            return (PerfectHashTableLinear) backend;
+        } else {
+            throw new UnsupportedOperationException("Backend is not of type PerfectHashTableLinear");
+        }
     }
 
     public boolean search(String key) {

@@ -98,7 +98,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
-          <argLine>-Xmx8G</argLine> <!-- Set heap size here -->
+          <argLine>-Xmx4G</argLine> <!-- Set heap size here -->
         </configuration>
       </plugin>
         </plugins>

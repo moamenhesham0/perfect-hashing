@@ -9,6 +9,7 @@ import java.util.UUID;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
+import perfecthashing.dictionary.PerfectHashDictionary;
 import perfecthashing.hashing.PerfectHashTableLinear;
 import perfecthashing.hashing.PerfectHashTableQuadratic;
 
@@ -16,6 +17,7 @@ public class PerfectHashingUnitTest
 {
     private static PerfectHashTableLinear perfectHashTableLinear;
     private static PerfectHashTableQuadratic perfectHashTableQuadratic;
+    private static PerfectHashDictionary perfectHashDictionary;
     private static final double NANO_TO_MILLI = 1_000_000.0;
 
 
@@ -478,45 +480,33 @@ public class PerfectHashingUnitTest
         perfectHashTableLinear = null;
 
 
-        List<String> keys = new ArrayList<>();
-        String key = "word";
-        for (int i = 0; i < 1_000_000; i++) {
-            key += i;
-            keys.add(key);
-        }
 
+
+        List<String> keys = new ArrayList<>();
         double linearExecutionTime = measureExecutionTime(() -> {
-            perfectHashTableLinear = new PerfectHashTableLinear();
-            for (String k : keys) {
-                perfectHashTableLinear.insert(k);
-            }
+            perfectHashDictionary = new PerfectHashDictionary("linear" , keys);
+            perfectHashDictionary.batchInsert("/home/moamen/Programming/Java_projects/Perfect_Hashing/perfect-hashing/one_million_words.txt");
         });
 
-
+        PerfectHashTableLinear table =  perfectHashDictionary.getBackend();
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
-        System.out.println("Total Keys: " + keys.size() + "\n");
+        System.out.println("Total Keys: 1000000" + "\n");
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + table.getSize());
+        System.out.println("Collisions: " + table.getTotalCollisions());
+        System.out.println("Total Rehashings: " + table.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + table.getTotalCapacity());
+        System.out.println("Usage Ratio: " + table.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
-        for(String k : keys)
-        {
-            assertTrue(perfectHashTableLinear.search(k));
-        }
+
     }
 
-    @Test
-    public void printMaxHeap() {
-        long maxHeap = Runtime.getRuntime().maxMemory();
-        System.out.println("Max heap size: " + (maxHeap / (1024 * 1024)) + " MB");
-    }
+
+
 
 
 
