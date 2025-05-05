@@ -5,9 +5,9 @@ import java.util.*;
 public class UniversalHashing {
     private final int[][] matrix;
     private final int b, u;
-    private final long capacity;
+    private final int capacity;
 
-    public UniversalHashing(int b, long capacity) {
+    public UniversalHashing(int b, int capacity) {
         this.b = b;
         this.u = computeUBits(capacity);
         this.capacity = capacity;
@@ -52,7 +52,7 @@ public class UniversalHashing {
         for (int i = 0; i < key.length(); i++) {
             hash = 31 * hash + key.charAt(i);
             // Add rotations for better bit distribution
-            hash = (hash << 5) | (hash >>> 59); // 5-bit left rotation
+            hash = (hash << 5) | (hash >>> 59);
         }
         
         // Add key length influence
@@ -78,9 +78,12 @@ public class UniversalHashing {
     }
 
     /* Computes the number of bits needed in the hash function matrix row dimension */
-    private int computeUBits(long capacity)
-    {
-        // Increase the bit size to reduce collision probability
-        return Math.max(32, (int) Math.ceil(Math.log(capacity) / Math.log(2)) * 2);
+    private int computeUBits(int capacity) {
+        int bitsNeeded = (int) (Math.ceil(Math.log(capacity) / Math.log(2)) * 3);
+        
+        int maxBits = 512;  // Upper limit to prevent excessive memory usage
+        int minBits = 32;   // Lower limit to ensure good distribution
+        
+        return Math.min(maxBits, Math.max(minBits, bitsNeeded));
     }
 }
