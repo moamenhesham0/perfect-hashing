@@ -32,7 +32,7 @@ public class PerfectHashingUnitTest
         perfectHashTableLinear = null;
         perfectHashTableQuadratic = null;
 
-        List<String> keys = Arrays.asList("apple", "banana", "cherry", "date", "fig", "grape");
+        List<String> keys = Arrays.asList("apple","fruit", "banana", "cherry", "date", "fig", "grape");
 
         double linearExecutionTime = measureExecutionTime(() -> {
             perfectHashTableLinear = new PerfectHashTableLinear(keys);
@@ -54,7 +54,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
@@ -62,7 +62,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
@@ -81,7 +81,7 @@ public class PerfectHashingUnitTest
         perfectHashTableLinear = null;
         perfectHashTableQuadratic = null;
 
-        String [] keys = {"apple", "banana", "cherry", "date", "fig", "grape" , "kiwi", "lemon", "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "fruit", "vanilla bean", "watermelon"};
+        String [] keys = {"apple", "banana", "cherry", "date", "fig", "grape" , "kiwi", "lemon", "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "abcfruit", "vanilla bean", "watermelon"};
 
         double linearExecutionTime = measureExecutionTime(() -> {
             perfectHashTableLinear = new PerfectHashTableLinear();
@@ -106,7 +106,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
@@ -114,7 +114,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
@@ -131,7 +131,7 @@ public class PerfectHashingUnitTest
         perfectHashTableLinear = null;
         perfectHashTableQuadratic = null;
 
-        List<String> keys = Arrays.asList("apple", "banana", "cherry", "date", "fig", "grape" , "kiwi", "lemon", "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "ugli fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "ugli fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "ugli fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange");
+        List<String> keys = Arrays.asList("apple", "banana", "cherry", "date", "fig", "grape" , "kiwi", "lemon", "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "ugli fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "abc fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "abc fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange");
 
 
         double linearExecutionTime = measureExecutionTime(() -> {
@@ -230,7 +230,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
@@ -238,7 +238,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
@@ -345,7 +345,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
@@ -353,7 +353,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
@@ -405,7 +405,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
@@ -413,7 +413,7 @@ public class PerfectHashingUnitTest
         System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
         System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
         System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio());
+        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
@@ -470,6 +470,46 @@ public class PerfectHashingUnitTest
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
+    }
+
+    @Test
+    public void testInsertOneMillionEntry()
+    {
+        perfectHashTableLinear = null;
+
+
+        List<String> keys = new ArrayList<>();
+        String key = "word";
+        for (int i = 0; i < 1_000_000; i++) {
+            key += i;
+            keys.add(key);
+        }
+
+        double linearExecutionTime = measureExecutionTime(() -> {
+            perfectHashTableLinear = new PerfectHashTableLinear();
+            for (String k : keys) {
+                perfectHashTableLinear.insert(k);
+            }
+        });
+
+
+        System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+        System.out.println("Total Keys: " + keys.size() + "\n");
+
+        System.out.println("Linear :\n");
+        System.out.println("Execution Time: " + linearExecutionTime + " ms");
+        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
+        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("\n");
+        System.out.println("--------------------------------------------------------");
+
+        for(String k : keys)
+        {
+            assertTrue(perfectHashTableLinear.search(k));
+        }
     }
 
 

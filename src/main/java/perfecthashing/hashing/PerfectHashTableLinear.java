@@ -75,7 +75,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
 
     public double getUsageRatio()
     {
-        return (double) this.size / this.getTotalCapacity();
+        return ((double) this.size / this.getTotalCapacity()  * 1e2);
     }
 
     public long getTotalRehashingTrials()

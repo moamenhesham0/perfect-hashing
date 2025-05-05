@@ -69,7 +69,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
     public double getUsageRatio()
     {
-        return (double)this.size / this.capacity;
+        return ((double)this.size / this.capacity *1e2);
     }
 
     public long getRehashingTrials()
@@ -102,7 +102,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     {
         boolean success = false;
         String[] newHashTable = new String[this.capacity];
-        while (!success)
+        do
         {
             ++this.rehashingTrials;
             success = true;
@@ -122,7 +122,6 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
                     success = false;
                     break;
                 }
-
             }
 
             if(collisionKey != null)
@@ -131,6 +130,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
             }
 
         }
+        while (!success);
         this.hashTable = newHashTable;
     }
 
@@ -150,6 +150,13 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     @Override
     public boolean insert(String key)
     {
+
+        // Resizes the hash table on capacity < size^2
+        if(this.size * this.size >= this.capacity)
+        {
+            this.resizeHashTable();
+        }
+
         int index = this.hashFunction.hash(key);
 
         // Returns false on existing dictionary entry
@@ -159,16 +166,9 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         }
 
 
-        // Resizes the hash table on capacity < size^2
-        if(this.size * this.size >= this.capacity)
-        {
-            this.resizeHashTable();
-        }
-
-
-
         if (this.hashTable[index] == null)
         {
+
             this.hashTable[index] = key;
         }
         else
@@ -201,5 +201,10 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     {
         int index = this.hashFunction.hash(key);
         return (this.hashTable[index] != null && this.hashTable[index].equals(key));
+    }
+
+    public int getIndex(String key)
+    {
+        return this.hashFunction.hash(key);
     }
 }
