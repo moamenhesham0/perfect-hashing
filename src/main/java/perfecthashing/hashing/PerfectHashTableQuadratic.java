@@ -1,6 +1,6 @@
 package perfecthashing.hashing;
 
-import java.util.*;
+import java.util.List;
 
 public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
@@ -11,7 +11,10 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     private String[] hashTable;
     private int size;
     private int capacity;
+    private int collisions;
+    private long rehashingTrials;
     private UniversalHashing hashFunction;
+
 
 
     /* Constructors */
@@ -30,7 +33,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
         for(String key : keys)
         {
-            insert(key);
+            this.insert(key);
         }
     }
 
@@ -40,6 +43,9 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     {
         this(DEFAULT_CAPACITY);
     }
+
+
+    /* Getters */
 
     public String[] getHashTable()
     {
@@ -51,20 +57,40 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         return this.size;
     }
 
+    public int getCapacity()
+    {
+        return this.capacity;
+    }
+
+    public int getCollisions()
+    {
+        return this.collisions;
+    }
+
+    public double getUsageRatio()
+    {
+        return (double)this.size / this.capacity;
+    }
+
+    public long getRehashingTrials()
+    {
+        return this.rehashingTrials;
+    }
+
 
 
     /* Reinsertion sub-routine in rehashing */
 
-    private boolean reinsert(String key )
+    private boolean reinsert(String key , String[] newHashTable)
     {
         final int index = this.hashFunction.hash(key);
 
-        if (this.hashTable[index] != null)
+        if (newHashTable[index] != null)
         {
             return false;
         }
 
-        this.hashTable[index] = key;
+        newHashTable[index] = key;
         return true;
     }
 
@@ -75,36 +101,37 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
     private void rehash(String collisionKey)
     {
         boolean success = false;
-        String[] oldHashTable = this.hashTable;
+        String[] newHashTable = new String[this.capacity];
         while (!success)
         {
+            ++this.rehashingTrials;
             success = true;
             this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
 
-            this.hashTable = new String[this.capacity];
+            newHashTable = new String[this.capacity];
 
-            for (String key : oldHashTable)
+            for (String key : this.hashTable)
             {
                 if(key == null)
                 {
                     continue;
                 }
 
-                if(!this.reinsert(key))
+                if(!this.reinsert(key , newHashTable))
                 {
                     success = false;
                     break;
                 }
 
-
             }
 
             if(collisionKey != null)
             {
-                success &= this.reinsert(collisionKey);
+                success &= this.reinsert(collisionKey , newHashTable);
             }
 
         }
+        this.hashTable = newHashTable;
     }
 
 
@@ -138,7 +165,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
             this.resizeHashTable();
         }
 
-        ++this.size;
+
 
         if (this.hashTable[index] == null)
         {
@@ -146,9 +173,11 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
         }
         else
         {
+            ++this.collisions;
             this.rehash(key);
         }
 
+        ++this.size;
         return true;
     }
 

@@ -1,7 +1,5 @@
 package perfecthashing.hashing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 public class PerfectHashTableLinear implements IPerfectHashTable {
 
@@ -21,6 +19,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
         this.size = INITIAL_SIZE;
         this.hashTable = new PerfectHashTableQuadratic[this.capacity];
         this.hashFunction = new UniversalHashing(Integer.SIZE,this.capacity);
+
         for(int i = 0; i < this.capacity; i++)
         {
             this.hashTable[i] = new PerfectHashTableQuadratic();
@@ -33,7 +32,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
 
         for(final String key : keys)
         {
-            insert(key);
+            this.insert(key);
         }
     }
 
@@ -46,31 +45,80 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     }
 
 
+
+    /* Getters */
+
+    public int getSize()
+    {
+        return this.size;
+    }
+
+    public long getTotalCollisions()
+    {
+        long totalCollisions = 0;
+        for (PerfectHashTableQuadratic bucket : this.hashTable)
+        {
+            totalCollisions += bucket.getCollisions();
+        }
+        return totalCollisions;
+    }
+
+    public long getTotalCapacity()
+    {
+        long totalCapacity = 0;
+        for (PerfectHashTableQuadratic bucket : this.hashTable)
+        {
+            totalCapacity += bucket.getCapacity();
+        }
+        return totalCapacity;
+    }
+
+    public double getUsageRatio()
+    {
+        return (double) this.size / this.getTotalCapacity();
+    }
+
+    public long getTotalRehashingTrials()
+    {
+        long totalRehashingTrials = 0;
+        for (PerfectHashTableQuadratic bucket : this.hashTable)
+        {
+            totalRehashingTrials += bucket.getRehashingTrials();
+        }
+        return totalRehashingTrials;
+    }
+
+
+
+
     private void rehash()
     {
         this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
-        PerfectHashTableQuadratic[] oldHashTable = this.hashTable;
-        this.hashTable = new PerfectHashTableQuadratic[this.capacity];
+
+        PerfectHashTableQuadratic[] newHashTable = new PerfectHashTableQuadratic[this.capacity];
+
 
 
         for(int i = 0; i < this.capacity; i++)
         {
-            this.hashTable[i] = new PerfectHashTableQuadratic();
+            newHashTable[i] = new PerfectHashTableQuadratic();
         }
 
-        for(PerfectHashTableQuadratic bucket : oldHashTable)
+        for(PerfectHashTableQuadratic bucket : this.hashTable)
         {
             if(bucket.getSize() == 0) continue;
-            
+
             String[] table = bucket.getHashTable();
 
             for(String key : table)
             {
                 if(key == null) continue;
-                final int index = hashFunction.hash(key);
-                this.hashTable[index].insert(key);
+                final int index = this.hashFunction.hash(key);
+                newHashTable[index].insert(key);
             }
         }
+
+        this.hashTable = newHashTable;
     }
 
     private void resizeHashTable()
@@ -88,7 +136,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
             this.resizeHashTable();
         }
 
-        final int index = hashFunction.hash(key);
+        final int index = this.hashFunction.hash(key);
 
         if(this.hashTable[index].insert(key))
         {
@@ -102,7 +150,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     @Override
     public boolean delete(final String key)
     {
-        final int index = hashFunction.hash(key);
+        final int index = this.hashFunction.hash(key);
 
         if (this.hashTable[index].delete(key))
         {
@@ -116,7 +164,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     @Override
     public boolean search(final String key)
     {
-        final int index = hashFunction.hash(key);
+        final int index = this.hashFunction.hash(key);
         return this.hashTable[index].search(key);
     }
 
