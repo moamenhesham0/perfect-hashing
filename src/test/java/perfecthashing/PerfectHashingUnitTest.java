@@ -512,6 +512,12 @@ public class PerfectHashingUnitTest
         }
     }
 
+    @Test
+    public void printMaxHeap() {
+        long maxHeap = Runtime.getRuntime().maxMemory();
+        System.out.println("Max heap size: " + (maxHeap / (1024 * 1024)) + " MB");
+    }
+
 
 
 

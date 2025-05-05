@@ -76,7 +76,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <argLine>-Xmx15G</argLine>
                     <source>11</source>
                     <target>11</target>
                 </configuration>
@@ -88,9 +87,20 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
+                <argLine>-Xmx16G</argLine>
                     <mainClass>perfect-hashing.Main</mainClass>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <argLine>-Xmx8G</argLine> <!-- Set heap size here -->
+        </configuration>
+      </plugin>
         </plugins>
     </build>
 </project>
