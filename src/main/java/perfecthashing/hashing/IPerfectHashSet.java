@@ -1,6 +1,6 @@
 package perfecthashing.hashing;
 
-public interface IPerfectHashTable {
+public interface IPerfectHashSet {
 
     /* Inserts an entry to the hash set */
     boolean insert(String key);

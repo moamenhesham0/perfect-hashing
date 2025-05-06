@@ -5,13 +5,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import perfecthashing.hashing.IPerfectHashTable;
-import perfecthashing.hashing.PerfectHashTableLinear;
-import perfecthashing.hashing.PerfectHashTableQuadratic;
+import perfecthashing.hashing.IPerfectHashSet;
+import perfecthashing.hashing.PerfectLinearHashSet;
+import perfecthashing.hashing.PerfectQuadraticHashSet;
 
 
 public class PerfectHashDictionary {
-    private IPerfectHashTable backend;
+    private IPerfectHashSet backend;
     private String type;
 
     public PerfectHashDictionary(String type, List<String> keys) {
@@ -23,22 +23,16 @@ public class PerfectHashDictionary {
 
         if (type.equals("quadratic"))
         {
-            backend = (!keys.isEmpty()) ? new PerfectHashTableQuadratic(keys) : new PerfectHashTableQuadratic();
+            backend = (!keys.isEmpty()) ? new PerfectQuadraticHashSet(keys) : new PerfectQuadraticHashSet();
         }
         else
         {
-            backend = (!keys.isEmpty()) ? new PerfectHashTableLinear(keys) : new PerfectHashTableLinear();
+            backend = (!keys.isEmpty()) ? new PerfectLinearHashSet(keys) : new PerfectLinearHashSet();
         }
 
     }
 
-    public PerfectHashTableLinear getBackend() {
-        if (backend instanceof PerfectHashTableLinear) {
-            return (PerfectHashTableLinear) backend;
-        } else {
-            throw new UnsupportedOperationException("Backend is not of type PerfectHashTableLinear");
-        }
-    }
+
 
     public boolean search(String key) {
         return backend.search(key);

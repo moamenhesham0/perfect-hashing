@@ -7,8 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.DoubleStream;
 
-import perfecthashing.hashing.PerfectHashTableLinear;
-import perfecthashing.hashing.PerfectHashTableQuadratic;
+import perfecthashing.hashing.PerfectLinearHashSet;
+import perfecthashing.hashing.PerfectQuadraticHashSet;
 
 
 public class PerfectHashingStatistics {
@@ -19,8 +19,8 @@ public class PerfectHashingStatistics {
     private static final int MAX_KEY_LENGTH = 32;
     private static final double AVG_RUNS = 1e2;
 
-    private static PerfectHashTableLinear perfectHashTableLinear;
-    private static PerfectHashTableQuadratic perfectHashTableQuadratic;
+    private static PerfectLinearHashSet perfectLinearHashSet;
+    private static PerfectQuadraticHashSet perfectQuadraticHashSet;
 
 
     public static Double measureExecutionTime(Runnable function) {
@@ -87,50 +87,50 @@ public class PerfectHashingStatistics {
 
             for(int j = 0; j < AVG_RUNS; ++j) {
                 // Linear hash table operations
-                perfectHashTableLinear = new PerfectHashTableLinear();
+                perfectLinearHashSet = new PerfectLinearHashSet();
                 avgLinearInsertionTime += measureExecutionTime(() -> {
                     for (String key : keys) {
-                        perfectHashTableLinear.insert(key);
+                        perfectLinearHashSet.insert(key);
                     }
                 });
 
                 avgLinearSearchTime += measureExecutionTime(() -> {
                     for (String key : keys) {
-                        perfectHashTableLinear.search(key);
+                        perfectLinearHashSet.search(key);
                     }
                 });
 
                 avgLinearDeleteTime += measureExecutionTime(() -> {
                     for (String key : keys) {
-                        perfectHashTableLinear.delete(key);
+                        perfectLinearHashSet.delete(key);
                     }
                 });
 
-                avgLinearCollisions += perfectHashTableLinear.getTotalCollisions();
-                avgLinearRehashing += perfectHashTableLinear.getTotalRehashingTrials();
+                avgLinearCollisions += perfectLinearHashSet.getTotalCollisions();
+                avgLinearRehashing += perfectLinearHashSet.getTotalRehashingTrials();
 
                 // Quadratic hash table operations
-                perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+                perfectQuadraticHashSet = new PerfectQuadraticHashSet();
                 avgQuadraticInsertionTime += measureExecutionTime(() -> {
                     for (String key : keys) {
-                        perfectHashTableQuadratic.insert(key);
+                        perfectQuadraticHashSet.insert(key);
                     }
                 });
 
                 avgQuadraticSearchTime += measureExecutionTime(() -> {
                     for (String key : keys) {
-                        perfectHashTableQuadratic.search(key);
+                        perfectQuadraticHashSet.search(key);
                     }
                 });
 
                 avgQuadraticDeleteTime += measureExecutionTime(() -> {
                     for (String key : keys) {
-                        perfectHashTableQuadratic.delete(key);
+                        perfectQuadraticHashSet.delete(key);
                     }
                 });
 
-                avgQuadraticCollisions += perfectHashTableQuadratic.getCollisions();
-                avgQuadraticRehashing += perfectHashTableQuadratic.getRehashingTrials();
+                avgQuadraticCollisions += perfectQuadraticHashSet.getCollisions();
+                avgQuadraticRehashing += perfectQuadraticHashSet.getRehashingTrials();
             }
 
             // Calculate averages

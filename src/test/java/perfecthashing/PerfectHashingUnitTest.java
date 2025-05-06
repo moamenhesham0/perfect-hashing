@@ -10,13 +10,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import perfecthashing.dictionary.PerfectHashDictionary;
-import perfecthashing.hashing.PerfectHashTableLinear;
-import perfecthashing.hashing.PerfectHashTableQuadratic;
+import perfecthashing.hashing.PerfectLinearHashSet;
+import perfecthashing.hashing.PerfectQuadraticHashSet;
 
 public class PerfectHashingUnitTest
 {
-    private static PerfectHashTableLinear perfectHashTableLinear;
-    private static PerfectHashTableQuadratic perfectHashTableQuadratic;
+    private static PerfectLinearHashSet perfectLinearHashSet;
+    private static PerfectQuadraticHashSet perfectQuadraticHashSet;
     private static PerfectHashDictionary perfectHashDictionary;
     private static final double NANO_TO_MILLI = 1_000_000.0;
 
@@ -31,17 +31,17 @@ public class PerfectHashingUnitTest
     @Test
     public void testStaticInsertion()
     {
-        perfectHashTableLinear = null;
-        perfectHashTableQuadratic = null;
+        perfectLinearHashSet = null;
+        perfectQuadraticHashSet = null;
 
         List<String> keys = Arrays.asList("apple","fruit", "banana", "cherry", "date", "fig", "grape");
 
         double linearExecutionTime = measureExecutionTime(() -> {
-            perfectHashTableLinear = new PerfectHashTableLinear(keys);
+            perfectLinearHashSet = new PerfectLinearHashSet(keys);
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
-            perfectHashTableQuadratic = new PerfectHashTableQuadratic(keys);
+            perfectQuadraticHashSet = new PerfectQuadraticHashSet(keys);
         });
 
 
@@ -52,28 +52,28 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
 
 
         for (String key : keys) {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
     }
 
@@ -81,20 +81,20 @@ public class PerfectHashingUnitTest
     @Test
     public void testDynamicInsertion()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         String [] keys = {"apple", "banana", "cherry", "date", "fig", "grape" , "kiwi", "lemon", "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "abcfruit", "vanilla bean", "watermelon"};
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
         });
 
@@ -103,60 +103,60 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
 
         for (String key : keys) {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
     }
 
     @Test
     public void testInsertionSearchAndDeletionWithDuplicates()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         List<String> keys = Arrays.asList("apple", "banana", "cherry", "date", "fig", "grape" , "kiwi", "lemon", "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "ugli fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "abc fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange", "papaya", "quince", "raspberry", "strawberry", "tangerine", "abc fruit", "vanilla bean", "watermelon" , "mango", "nectarine", "orange");
 
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
             for (String key : keys) {
-                assertTrue(perfectHashTableLinear.search(key));
+                assertTrue(perfectLinearHashSet.search(key));
             }
             for (String key : keys) {
-                perfectHashTableLinear.delete(key);
+                perfectLinearHashSet.delete(key);
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
             for (String key : keys) {
-                assertTrue(perfectHashTableQuadratic.search(key));
+                assertTrue(perfectQuadraticHashSet.search(key));
             }
             for (String key : keys) {
-                perfectHashTableQuadratic.delete(key);
+                perfectQuadraticHashSet.delete(key);
             }
         });
 
@@ -166,37 +166,32 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
-        String [] table = perfectHashTableQuadratic.getHashTable();
-        for(String k : table)
-        {
-            if(k!=null)
-            System.out.println(k);
-        }
-        assertTrue(perfectHashTableLinear.getSize() ==0);
-        assertTrue(perfectHashTableQuadratic.getSize() ==0);
+
+        assertTrue(perfectLinearHashSet.getSize() ==0);
+        assertTrue(perfectQuadraticHashSet.getSize() ==0);
     }
 
 
     @Test
     public void testBigDynamicInsertion()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         final int MAX_KEYS = 16000;
         final int MAX_KEY_LENGTH = 32;
@@ -210,13 +205,13 @@ public class PerfectHashingUnitTest
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
         });
 
@@ -225,34 +220,34 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         for (String key : keys) {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
     }
 
     @Test
     public void testBigBatchDeletion()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         final int MAX_KEYS = 16000;
         final int MAX_KEY_LENGTH = 32;
@@ -265,23 +260,23 @@ public class PerfectHashingUnitTest
         }
 
         for (String key : keys) {
-            perfectHashTableLinear.insert(key);
+            perfectLinearHashSet.insert(key);
         }
         for (String key : keys) {
-            perfectHashTableQuadratic.insert(key);
+            perfectQuadraticHashSet.insert(key);
         }
 
 
         double linearExecutionTime = measureExecutionTime(() -> {
 
             for (String key : keys) {
-                assertTrue(perfectHashTableLinear.delete(key));
+                assertTrue(perfectLinearHashSet.delete(key));
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                assertTrue(perfectHashTableQuadratic.delete(key));
+                assertTrue(perfectQuadraticHashSet.delete(key));
             }
         });
 
@@ -290,46 +285,46 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
 
-        assertTrue(perfectHashTableLinear.getSize() ==0);
-        assertTrue(perfectHashTableQuadratic.getSize() ==0);
+        assertTrue(perfectLinearHashSet.getSize() ==0);
+        assertTrue(perfectQuadraticHashSet.getSize() ==0);
     }
 
     @Test
     public void InsertDuplicatesOnly()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         String key = "apple";
 
 
         double linearExecutionTime = measureExecutionTime(() -> {
-            assertTrue(perfectHashTableLinear.insert(key));
+            assertTrue(perfectLinearHashSet.insert(key));
             for (int i = 0; i < 1000; i++) {
-                assertTrue(!perfectHashTableLinear.insert(key));
+                assertTrue(!perfectLinearHashSet.insert(key));
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
-            assertTrue(perfectHashTableQuadratic.insert(key));
+            assertTrue(perfectQuadraticHashSet.insert(key));
             for (int i = 0; i < 1000; i++) {
-                assertTrue(!perfectHashTableQuadratic.insert(key));
+                assertTrue(!perfectQuadraticHashSet.insert(key));
             }
         });
 
@@ -338,32 +333,32 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
-        assertTrue((perfectHashTableLinear.search(key) && perfectHashTableQuadratic.getSize() == 1));
-        assertTrue((perfectHashTableQuadratic.search(key) && perfectHashTableQuadratic.getSize() == 1));
+        assertTrue((perfectLinearHashSet.search(key) && perfectQuadraticHashSet.getSize() == 1));
+        assertTrue((perfectQuadraticHashSet.search(key) && perfectQuadraticHashSet.getSize() == 1));
     }
 
     @Test
     public void testStringsWithCriticallyCloseHashValues()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
 
         List<String> keys = Arrays.asList(
@@ -382,13 +377,13 @@ public class PerfectHashingUnitTest
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
         });
 
@@ -397,52 +392,52 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         // Verify all keys were inserted correctly
         for (String key : keys) {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
 
         // Check total insertions (accounting for duplicates like "aaaab")
         Set<String> uniqueKeys = new HashSet<>(keys);
-        assertTrue(uniqueKeys.size()== perfectHashTableLinear.getSize());
-        assertTrue(uniqueKeys.size()== perfectHashTableQuadratic.getSize());
+        assertTrue(uniqueKeys.size()== perfectLinearHashSet.getSize());
+        assertTrue(uniqueKeys.size()== perfectQuadraticHashSet.getSize());
     }
 
     @Test
     public void testBatchDeleteOnEmptyTable()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         List<String> keys = Arrays.asList("apple", "banana", "cherry", "date", "fig", "grape");
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                assertTrue(!perfectHashTableLinear.delete(key));
+                assertTrue(!perfectLinearHashSet.delete(key));
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                assertTrue(!perfectHashTableQuadratic.delete(key));
+                assertTrue(!perfectQuadraticHashSet.delete(key));
             }
         });
 
@@ -451,17 +446,17 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
@@ -470,7 +465,7 @@ public class PerfectHashingUnitTest
     // @Test
     // public void testInsertOneMillionEntry()
     // {
-    //     perfectHashTableLinear = null;
+    //     perfectLinearHashSet = null;
 
 
 
@@ -481,7 +476,7 @@ public class PerfectHashingUnitTest
     //         perfectHashDictionary.batchInsert("/perfect-hashing/one_million_words.txt");
     //     });
 
-    //     PerfectHashTableLinear table =  perfectHashDictionary.getBackend();
+    //     perfectLinearHashSet table =  perfectHashDictionary.getBackend();
     //     System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
     //     System.out.println("Total Keys: 1000000" + "\n");
 
@@ -502,8 +497,8 @@ public class PerfectHashingUnitTest
     @Test
     public void testInsertSpecialCharactersStrings()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
 
 
@@ -517,38 +512,38 @@ public class PerfectHashingUnitTest
         double linearExecutionTime = measureExecutionTime(() -> {
 
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
         });
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
         });
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
         System.out.println("Total Keys: " + keys.size() + "\n");
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         for(String key : keys)
         {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
     }
 
@@ -556,8 +551,8 @@ public class PerfectHashingUnitTest
     @Test
     public void testLongStrings()
     {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         List<String> keys = Arrays.asList(
             "appleappleappleappleappleappleappleapple",
@@ -593,17 +588,15 @@ public class PerfectHashingUnitTest
             "hemahemhemahemhemahemhemahem"
         );
 
-        perfectHashTableLinear = new PerfectHashTableLinear();
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
         });
 
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
         });
 
@@ -612,53 +605,53 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         for(String key : keys)
         {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
     }
 
 
     @Test
     public void testSearchNonExistentKeys() {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         List<String> keysToInsert = Arrays.asList("apple", "banana", "cherry", "date", "fig");
         List<String> keysToSearch = Arrays.asList("grape", "kiwi", "lemon", "mango", "orange");
 
         for (String key : keysToInsert) {
-            perfectHashTableLinear.insert(key);
-            perfectHashTableQuadratic.insert(key);
+            perfectLinearHashSet.insert(key);
+            perfectQuadraticHashSet.insert(key);
         }
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keysToSearch) {
-                assertTrue(!perfectHashTableLinear.search(key));
+                assertTrue(!perfectLinearHashSet.search(key));
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keysToSearch) {
-                assertTrue(!perfectHashTableQuadratic.search(key));
+                assertTrue(!perfectQuadraticHashSet.search(key));
             }
         });
 
@@ -668,60 +661,60 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio()+" %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio()+" %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio()+" %");
 
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         for (String key : keysToInsert) {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
     }
 
     @Test
     public void testEmptyStringAndNullHandling() {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
-        assertTrue(perfectHashTableLinear.insert(""));
-        assertTrue(perfectHashTableQuadratic.insert(""));
+        assertTrue(perfectLinearHashSet.insert(""));
+        assertTrue(perfectQuadraticHashSet.insert(""));
 
-        assertTrue(perfectHashTableLinear.search(""));
-        assertTrue(perfectHashTableQuadratic.search(""));
+        assertTrue(perfectLinearHashSet.search(""));
+        assertTrue(perfectQuadraticHashSet.search(""));
 
-        assertTrue(perfectHashTableLinear.delete(""));
-        assertTrue(perfectHashTableQuadratic.delete(""));
+        assertTrue(perfectLinearHashSet.delete(""));
+        assertTrue(perfectQuadraticHashSet.delete(""));
 
-        assertTrue(!perfectHashTableLinear.search(""));
-        assertTrue(!perfectHashTableQuadratic.search(""));
+        assertTrue(!perfectLinearHashSet.search(""));
+        assertTrue(!perfectQuadraticHashSet.search(""));
 
         System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
-        System.out.println("Linear size: " + perfectHashTableLinear.getSize());
-        System.out.println("Quadratic size: " + perfectHashTableQuadratic.getSize());
+        System.out.println("Linear size: " + perfectLinearHashSet.getSize());
+        System.out.println("Quadratic size: " + perfectQuadraticHashSet.getSize());
         System.out.println("--------------------------------------------------------");
 
-        assertTrue(perfectHashTableLinear.getSize() == 0);
-        assertTrue(perfectHashTableQuadratic.getSize() == 0);
+        assertTrue(perfectLinearHashSet.getSize() == 0);
+        assertTrue(perfectQuadraticHashSet.getSize() == 0);
     }
 
     @Test
     public void testMixOfOperations() {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         List<String> initialKeys = Arrays.asList(
             "apple", "banana", "cherry", "date", "elderberry",
@@ -733,53 +726,53 @@ public class PerfectHashingUnitTest
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : initialKeys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
 
             for (String key : keysToDelete) {
-                assertTrue(perfectHashTableLinear.delete(key));
+                assertTrue(perfectLinearHashSet.delete(key));
             }
 
             for (String key : keysToAdd) {
-                assertTrue(perfectHashTableLinear.insert(key));
+                assertTrue(perfectLinearHashSet.insert(key));
             }
 
             for (String key : initialKeys) {
                 if (keysToDelete.contains(key)) {
-                    assertTrue(!perfectHashTableLinear.search(key));
+                    assertTrue(!perfectLinearHashSet.search(key));
                 } else {
-                    assertTrue(perfectHashTableLinear.search(key));
+                    assertTrue(perfectLinearHashSet.search(key));
                 }
             }
 
             for (String key : keysToAdd) {
-                assertTrue(perfectHashTableLinear.search(key));
+                assertTrue(perfectLinearHashSet.search(key));
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : initialKeys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
 
             for (String key : keysToDelete) {
-                assertTrue(perfectHashTableQuadratic.delete(key));
+                assertTrue(perfectQuadraticHashSet.delete(key));
             }
 
             for (String key : keysToAdd) {
-                assertTrue(perfectHashTableQuadratic.insert(key));
+                assertTrue(perfectQuadraticHashSet.insert(key));
             }
 
             for (String key : initialKeys) {
                 if (keysToDelete.contains(key)) {
-                    assertTrue(!perfectHashTableQuadratic.search(key));
+                    assertTrue(!perfectQuadraticHashSet.search(key));
                 } else {
-                    assertTrue(perfectHashTableQuadratic.search(key));
+                    assertTrue(perfectQuadraticHashSet.search(key));
                 }
             }
 
             for (String key : keysToAdd) {
-                assertTrue(perfectHashTableQuadratic.search(key));
+                assertTrue(perfectQuadraticHashSet.search(key));
             }
         });
 
@@ -790,32 +783,32 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Final table size: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio() + " %");
+        System.out.println("Final table size: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio() + " %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Final table size: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio() + " %");
+        System.out.println("Final table size: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio() + " %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         int expectedSize = initialKeys.size() - keysToDelete.size() + keysToAdd.size();
-        assertTrue(perfectHashTableLinear.getSize() == expectedSize);
-        assertTrue(perfectHashTableQuadratic.getSize() == expectedSize);
+        assertTrue(perfectLinearHashSet.getSize() == expectedSize);
+        assertTrue(perfectQuadraticHashSet.getSize() == expectedSize);
     }
 
     @Test
     public void testPerformanceWithNumbersAsStrings() {
-        perfectHashTableLinear = new PerfectHashTableLinear();
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic();
+        perfectLinearHashSet = new PerfectLinearHashSet();
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet();
 
         List<String> keys = new ArrayList<>();
         int numKeys = 1000;
@@ -826,13 +819,13 @@ public class PerfectHashingUnitTest
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
         });
 
@@ -841,27 +834,27 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets:"  + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio() + " %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets:"  + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio() + " %");
 
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio() + " %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio() + " %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         for (String key : keys) {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
     }
 
@@ -869,8 +862,8 @@ public class PerfectHashingUnitTest
     public void testHighLoadFactor() {
 
         int initialCapacity = 16;
-        perfectHashTableLinear = new PerfectHashTableLinear(initialCapacity);
-        perfectHashTableQuadratic = new PerfectHashTableQuadratic(initialCapacity);
+        perfectLinearHashSet = new PerfectLinearHashSet(initialCapacity);
+        perfectQuadraticHashSet = new PerfectQuadraticHashSet(initialCapacity);
 
         List<String> keys = new ArrayList<>();
         int numKeys = initialCapacity * 4;
@@ -882,13 +875,13 @@ public class PerfectHashingUnitTest
 
         double linearExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableLinear.insert(key);
+                perfectLinearHashSet.insert(key);
             }
         });
 
         double quadraticExecutionTime = measureExecutionTime(() -> {
             for (String key : keys) {
-                perfectHashTableQuadratic.insert(key);
+                perfectQuadraticHashSet.insert(key);
             }
         });
 
@@ -898,30 +891,30 @@ public class PerfectHashingUnitTest
 
         System.out.println("Linear :\n");
         System.out.println("Execution Time: " + linearExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableLinear.getSize());
-        System.out.println("Collisions: " + perfectHashTableLinear.getTotalCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableLinear.getTotalRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableLinear.getTotalCapacity());
-        System.out.println("Total Inner Buckets: " + perfectHashTableLinear.getInnerBucketsTotalCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableLinear.getUsageRatio() + " %");
+        System.out.println("Total Keys Inserted: " + perfectLinearHashSet.getSize());
+        System.out.println("Collisions: " + perfectLinearHashSet.getTotalCollisions());
+        System.out.println("Total Rehashings: " + perfectLinearHashSet.getTotalRehashingTrials());
+        System.out.println("Total Buckets: " + perfectLinearHashSet.getTotalCapacity());
+        System.out.println("Total Inner Buckets: " + perfectLinearHashSet.getInnerBucketsTotalCapacity());
+        System.out.println("Usage Ratio: " + perfectLinearHashSet.getUsageRatio() + " %");
 
         System.out.println("\nQuadratic :\n");
         System.out.println("Execution Time: " + quadraticExecutionTime + " ms");
-        System.out.println("Total Keys Inserted: " + perfectHashTableQuadratic.getSize());
-        System.out.println("Collisions: " + perfectHashTableQuadratic.getCollisions());
-        System.out.println("Total Rehashings: " + perfectHashTableQuadratic.getRehashingTrials());
-        System.out.println("Total Buckets: " + perfectHashTableQuadratic.getCapacity());
-        System.out.println("Usage Ratio: " + perfectHashTableQuadratic.getUsageRatio() + " %");
+        System.out.println("Total Keys Inserted: " + perfectQuadraticHashSet.getSize());
+        System.out.println("Collisions: " + perfectQuadraticHashSet.getCollisions());
+        System.out.println("Total Rehashings: " + perfectQuadraticHashSet.getRehashingTrials());
+        System.out.println("Total Buckets: " + perfectQuadraticHashSet.getCapacity());
+        System.out.println("Usage Ratio: " + perfectQuadraticHashSet.getUsageRatio() + " %");
         System.out.println("\n");
         System.out.println("--------------------------------------------------------");
 
         for (String key : keys) {
-            assertTrue(perfectHashTableLinear.search(key));
-            assertTrue(perfectHashTableQuadratic.search(key));
+            assertTrue(perfectLinearHashSet.search(key));
+            assertTrue(perfectQuadraticHashSet.search(key));
         }
 
-        assertTrue(perfectHashTableLinear.getTotalCapacity() > initialCapacity);
-        assertTrue(perfectHashTableQuadratic.getCapacity() > initialCapacity);
+        assertTrue(perfectLinearHashSet.getTotalCapacity() > initialCapacity);
+        assertTrue(perfectQuadraticHashSet.getCapacity() > initialCapacity);
     }
 
 

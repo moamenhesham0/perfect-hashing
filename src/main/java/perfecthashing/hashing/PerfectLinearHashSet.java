@@ -1,32 +1,32 @@
 package perfecthashing.hashing;
 
 import java.util.List;
-public class PerfectHashTableLinear implements IPerfectHashTable {
+public class PerfectLinearHashSet implements IPerfectHashSet {
 
     private static final int DEFAULT_CAPACITY = 5;
     private static final int INITIAL_SIZE = 0;
 
-    private PerfectHashTableQuadratic[] hashTable;
+    private PerfectQuadraticHashSet[] hashSet;
     private int capacity;
     private int size;
     private UniversalHashing hashFunction;
 
 
 
-    public PerfectHashTableLinear(final int capacity)
+    public PerfectLinearHashSet(final int capacity)
     {
         this.capacity = capacity;
         this.size = INITIAL_SIZE;
-        this.hashTable = new PerfectHashTableQuadratic[this.capacity];
+        this.hashSet = new PerfectQuadraticHashSet[this.capacity];
         this.hashFunction = new UniversalHashing(Integer.SIZE,this.capacity);
 
         for(int i = 0; i < this.capacity; i++)
         {
-            this.hashTable[i] = new PerfectHashTableQuadratic();
+            this.hashSet[i] = new PerfectQuadraticHashSet();
         }
     }
 
-    public PerfectHashTableLinear(final List<String> keys)
+    public PerfectLinearHashSet(final List<String> keys)
     {
         this(keys.size());
 
@@ -39,7 +39,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
 
     /* Default Constructor */
 
-    public PerfectHashTableLinear()
+    public PerfectLinearHashSet()
     {
         this(DEFAULT_CAPACITY);
     }
@@ -56,7 +56,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     public long getTotalCollisions()
     {
         long totalCollisions = 0;
-        for (PerfectHashTableQuadratic bucket : this.hashTable)
+        for (PerfectQuadraticHashSet bucket : this.hashSet)
         {
             totalCollisions += bucket.getCollisions();
         }
@@ -70,7 +70,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     public long getInnerBucketsTotalCapacity()
     {
         long totalCapacity = 0;
-        for (PerfectHashTableQuadratic bucket : this.hashTable)
+        for (PerfectQuadraticHashSet bucket : this.hashSet)
         {
             totalCapacity += bucket.getCapacity();
         }
@@ -85,7 +85,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     public long getTotalRehashingTrials()
     {
         long totalRehashingTrials = 0;
-        for (PerfectHashTableQuadratic bucket : this.hashTable)
+        for (PerfectQuadraticHashSet bucket : this.hashSet)
         {
             totalRehashingTrials += bucket.getRehashingTrials();
         }
@@ -99,33 +99,33 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     {
         this.hashFunction = new UniversalHashing(Integer.SIZE, this.capacity);
 
-        PerfectHashTableQuadratic[] newHashTable = new PerfectHashTableQuadratic[this.capacity];
+        PerfectQuadraticHashSet[] newHashSet = new PerfectQuadraticHashSet[this.capacity];
 
 
 
         for(int i = 0; i < this.capacity; i++)
         {
-            newHashTable[i] = new PerfectHashTableQuadratic();
+            newHashSet[i] = new PerfectQuadraticHashSet();
         }
 
-        for(PerfectHashTableQuadratic bucket : this.hashTable)
+        for(PerfectQuadraticHashSet bucket : this.hashSet)
         {
             if(bucket.getSize() == 0) continue;
 
-            String[] table = bucket.getHashTable();
+            String[] table = bucket.getHashSet();
 
             for(String key : table)
             {
                 if(key == null) continue;
                 final int index = this.hashFunction.hash(key);
-                newHashTable[index].insert(key);
+                newHashSet[index].insert(key);
             }
         }
 
-        this.hashTable = newHashTable;
+        this.hashSet = newHashSet;
     }
 
-    private void resizeHashTable()
+    private void resizehashSet()
     {
         this.capacity = this.size * 2;
         this.rehash();
@@ -137,12 +137,12 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     {
         if (this.size >= this.capacity)
         {
-            this.resizeHashTable();
+            this.resizehashSet();
         }
 
         final int index = this.hashFunction.hash(key);
 
-        if(this.hashTable[index].insert(key))
+        if(this.hashSet[index].insert(key))
         {
             ++this.size;
             return true;
@@ -156,7 +156,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     {
         final int index = this.hashFunction.hash(key);
 
-        if (this.hashTable[index].delete(key))
+        if (this.hashSet[index].delete(key))
         {
             --this.size;
             return true;
@@ -169,7 +169,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
     public boolean search(final String key)
     {
         final int index = this.hashFunction.hash(key);
-        return this.hashTable[index].search(key);
+        return this.hashSet[index].search(key);
     }
 
 
