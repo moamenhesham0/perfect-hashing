@@ -131,6 +131,7 @@ public class PerfectHashTableQuadratic implements IPerfectHashTable {
 
         }
         while (!success);
+
         this.hashTable = newHashTable;
     }
 

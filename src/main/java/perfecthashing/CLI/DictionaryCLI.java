@@ -1,11 +1,15 @@
 package perfecthashing.CLI;
 
-import perfecthashing.dictionary.PerfectHashDictionary;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
-import java.util.*;
+import perfecthashing.dictionary.PerfectHashDictionary;
+import perfecthashing.utils.PerfectHashingStatistics;
 
 public class DictionaryCLI {
-    public static void main(String[] args) {
+    public void runCLI(){
         Scanner scanner = new Scanner(System.in);
         PerfectHashDictionary dictionary = null;
         String lastMessage = "";
@@ -24,12 +28,12 @@ public class DictionaryCLI {
         while (true) {
             // Clear screen
             clearScreen();
-            
+
             // Display last message at the top
             if (!lastMessage.isEmpty()) {
                 System.out.println(lastMessage);
             }
-            
+
             System.out.println("Choose Number from 1 to 6 for operation:");
             System.out.println("1. insert");
             System.out.println("2. delete");
@@ -37,19 +41,20 @@ public class DictionaryCLI {
             System.out.println("4. batch_insert");
             System.out.println("5. batch_delete");
             System.out.println("6. exit");
+            System.out.println("7. Generate Statistics Files");
 
             System.out.print("> ");
             String input = scanner.nextLine().trim();
-            
+
             // Check if input is empty
             if (input.isEmpty()) {
                 lastMessage = "Please enter a command.";
                 continue;
             }
-            
+
             // Get the first character as command
             char firstChar = input.charAt(0);
-            
+
             switch (firstChar) {
                 case '1': // insert
                     System.out.print("Enter word to insert: ");
@@ -59,7 +64,7 @@ public class DictionaryCLI {
                         break;
                     }
                     boolean inserted = dictionary.insert(wordToInsert);
-                    lastMessage = inserted ? "Word '" + wordToInsert + "' inserted." : 
+                    lastMessage = inserted ? "Word '" + wordToInsert + "' inserted." :
                                            "Word '" + wordToInsert + "' already exists.";
                     break;
 
@@ -71,7 +76,7 @@ public class DictionaryCLI {
                         break;
                     }
                     boolean deleted = dictionary.delete(wordToDelete);
-                    lastMessage = deleted ? "Word '" + wordToDelete + "' deleted." : 
+                    lastMessage = deleted ? "Word '" + wordToDelete + "' deleted." :
                                           "Word '" + wordToDelete + "' not found.";
                     break;
 
@@ -83,7 +88,7 @@ public class DictionaryCLI {
                         break;
                     }
                     boolean found = dictionary.search(wordToSearch);
-                    lastMessage = found ? "Word '" + wordToSearch + "' exists." : 
+                    lastMessage = found ? "Word '" + wordToSearch + "' exists." :
                                         "Word '" + wordToSearch + "' not found.";
                     break;
 
@@ -94,12 +99,12 @@ public class DictionaryCLI {
                         lastMessage = "Please provide a file path.";
                         break;
                     }
- 
+
                     int[] insertResults = dictionary.batchInsert(insertFilePath);
                     if (insertResults == null) {
                         lastMessage = "Failed to perform batch insert operation.";
                     } else {
-                        lastMessage = String.format("Batch insert completed: %d newly added, %d already existing", 
+                        lastMessage = String.format("Batch insert completed: %d newly added, %d already existing",
                                                   insertResults[0], insertResults[1]);
                     }
                     break;
@@ -111,12 +116,12 @@ public class DictionaryCLI {
                         lastMessage = "Please provide a file path.";
                         break;
                     }
-                   
+
                     int[] deleteResults = dictionary.batchDelete(deleteFilePath);
                     if (deleteResults == null) {
                         lastMessage = "Failed to perform batch delete operation.";
                     } else {
-                        lastMessage = String.format("Batch delete completed: %d deleted, %d non-existing", 
+                        lastMessage = String.format("Batch delete completed: %d deleted, %d non-existing",
                                                   deleteResults[0], deleteResults[1]);
                     }
                     break;
@@ -126,12 +131,18 @@ public class DictionaryCLI {
                     scanner.close();
                     return;
 
+                case '7':
+                    PerfectHashingStatistics.runStatisticsOnHashingOperations() ;
+                    break;
+
+
+
                 default:
                     lastMessage = "Unknown command. Please enter a number between 1 and 6.";
             }
         }
     }
-    
+
     // Method to clear the console screen
     private static void clearScreen() {
         try {

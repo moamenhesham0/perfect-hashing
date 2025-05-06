@@ -63,7 +63,11 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
         return totalCollisions;
     }
 
-    public long getTotalCapacity()
+    public int getTotalCapacity()
+    {
+        return this.capacity;
+    }
+    public long getInnerBucketsTotalCapacity()
     {
         long totalCapacity = 0;
         for (PerfectHashTableQuadratic bucket : this.hashTable)
@@ -75,7 +79,7 @@ public class PerfectHashTableLinear implements IPerfectHashTable {
 
     public double getUsageRatio()
     {
-        return ((double) this.size / this.getTotalCapacity()  * 1e2);
+        return ((double) this.size / this.getInnerBucketsTotalCapacity()  * 1e2);
     }
 
     public long getTotalRehashingTrials()
