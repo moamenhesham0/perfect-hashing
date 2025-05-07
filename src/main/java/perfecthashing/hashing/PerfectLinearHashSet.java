@@ -19,11 +19,6 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
         this.size = INITIAL_SIZE;
         this.hashSet = new PerfectQuadraticHashSet[this.capacity];
         this.hashFunction = new UniversalHashing(Integer.SIZE,this.capacity);
-
-        for(int i = 0; i < this.capacity; i++)
-        {
-            this.hashSet[i] = new PerfectQuadraticHashSet();
-        }
     }
 
     public PerfectLinearHashSet(final List<String> keys)
@@ -46,6 +41,8 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
 
 
 
+
+
     /* Getters */
 
     public int getSize()
@@ -56,9 +53,11 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
     public long getTotalCollisions()
     {
         long totalCollisions = 0;
-        for (PerfectQuadraticHashSet bucket : this.hashSet)
+        for(int i = 0 ; i<capacity ; ++i)
         {
-            totalCollisions += bucket.getCollisions();
+            if(this.hashSet[i] == null) continue;
+
+            totalCollisions+= this.hashSet[i].getCollisions();
         }
         return totalCollisions;
     }
@@ -67,12 +66,15 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
     {
         return this.capacity;
     }
+
     public long getInnerBucketsTotalCapacity()
     {
         long totalCapacity = 0;
-        for (PerfectQuadraticHashSet bucket : this.hashSet)
+        for(int i = 0 ; i<capacity ; ++i)
         {
-            totalCapacity += bucket.getCapacity();
+            if(this.hashSet[i] == null) continue;
+
+            totalCapacity+= this.hashSet[i].getCapacity();
         }
         return totalCapacity;
     }
@@ -85,12 +87,16 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
     public long getTotalRehashingTrials()
     {
         long totalRehashingTrials = 0;
-        for (PerfectQuadraticHashSet bucket : this.hashSet)
+        for(int i = 0 ; i<capacity ; ++i)
         {
-            totalRehashingTrials += bucket.getRehashingTrials();
+            if(this.hashSet[i] == null) continue;
+
+            totalRehashingTrials+= this.hashSet[i].getRehashingTrials();
         }
         return totalRehashingTrials;
     }
+
+
 
 
 
@@ -102,15 +108,9 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
         PerfectQuadraticHashSet[] newHashSet = new PerfectQuadraticHashSet[this.capacity];
 
 
-
-        for(int i = 0; i < this.capacity; i++)
-        {
-            newHashSet[i] = new PerfectQuadraticHashSet();
-        }
-
         for(PerfectQuadraticHashSet bucket : this.hashSet)
         {
-            if(bucket.getSize() == 0) continue;
+            if(bucket == null) continue;
 
             String[] table = bucket.getHashSet();
 
@@ -118,6 +118,12 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
             {
                 if(key == null) continue;
                 final int index = this.hashFunction.hash(key);
+
+                if(newHashSet[index] == null)
+                {
+                    newHashSet[index] = new PerfectQuadraticHashSet();
+                }
+
                 newHashSet[index].insert(key);
             }
         }
@@ -142,6 +148,11 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
 
         final int index = this.hashFunction.hash(key);
 
+        if(this.hashSet[index] == null)
+        {
+            this.hashSet[index] = new PerfectQuadraticHashSet();
+        }
+
         if(this.hashSet[index].insert(key))
         {
             ++this.size;
@@ -156,6 +167,11 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
     {
         final int index = this.hashFunction.hash(key);
 
+        if(this.hashSet[index] == null)
+        {
+            return false;
+        }
+
         if (this.hashSet[index].delete(key))
         {
             --this.size;
@@ -169,6 +185,12 @@ public class PerfectLinearHashSet implements IPerfectHashSet {
     public boolean search(final String key)
     {
         final int index = this.hashFunction.hash(key);
+
+        if(this.hashSet[index] == null)
+        {
+            return false;
+        }
+
         return this.hashSet[index].search(key);
     }
 
